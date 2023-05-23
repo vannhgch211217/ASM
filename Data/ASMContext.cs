@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using testing1.Models;
+using ASM.Models;
 
 namespace ASM.Data
 {
@@ -14,24 +14,24 @@ namespace ASM.Data
         {
         }
 
-        public DbSet<testing1.Models.User> User { get; set; } = default!;
+        public DbSet<ASM.Models.User> User { get; set; } = default!;
 
-        public DbSet<testing1.Models.Admin> Admin { get; set; } = default!;
+        public DbSet<ASM.Models.Admin> Admin { get; set; } = default!;
 
-        public DbSet<testing1.Models.Category> Category { get; set; } = default!;
+        public DbSet<ASM.Models.Category> Category { get; set; } = default!;
 
-        public DbSet<testing1.Models.ColorDetail> ColorDetail { get; set; } = default!;
+        public DbSet<ASM.Models.ColorDetail> ColorDetail { get; set; } = default!;
 
-        public DbSet<testing1.Models.Customer> Customer { get; set; } = default!;
+        public DbSet<ASM.Models.Customer> Customer { get; set; } = default!;
 
-        public DbSet<testing1.Models.Order> Order { get; set; } = default!;
+        public DbSet<ASM.Models.Order> Order { get; set; } = default!;
 
-        public DbSet<testing1.Models.OrderDetail> OrderDetail { get; set; } = default!;
+        public DbSet<ASM.Models.OrderDetail> OrderDetail { get; set; } = default!;
 
-        public DbSet<testing1.Models.Product> Product { get; set; } = default!;
+        public DbSet<ASM.Models.Product> Product { get; set; } = default!;
 
-        public DbSet<testing1.Models.Size> Size { get; set; } = default!;
+        public DbSet<ASM.Models.Size> Size { get; set; } = default!;
 
-        public DbSet<testing1.Models.Supplier> Supplier { get; set; } = default!;
+        public DbSet<ASM.Models.Supplier> Supplier { get; set; } = default!;
     }
 }

@@ -3,6 +3,7 @@ using System;
 using ASM.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
@@ -11,32 +12,38 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ASM.Migrations
 {
     [DbContext(typeof(ASMContext))]
-    [Migration("20230523153857_init")]
-    partial class init
+    [Migration("20230523161004_init1")]
+    partial class init1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "7.0.5");
+            modelBuilder
+                .HasAnnotation("ProductVersion", "7.0.5")
+                .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
-            modelBuilder.Entity("testing1.Models.Admin", b =>
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("ASM.Models.Admin", b =>
                 {
                     b.Property<int>("AdminID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AdminID"));
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
                         .HasMaxLength(11)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(11)");
 
                     b.Property<int>("UserID")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.HasKey("AdminID");
 
@@ -45,57 +52,64 @@ namespace ASM.Migrations
                     b.ToTable("Admin");
                 });
 
-            modelBuilder.Entity("testing1.Models.Category", b =>
+            modelBuilder.Entity("ASM.Models.Category", b =>
                 {
                     b.Property<int>("CategoryID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CategoryID"));
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("CategoryID");
 
                     b.ToTable("Category");
                 });
 
-            modelBuilder.Entity("testing1.Models.ColorDetail", b =>
+            modelBuilder.Entity("ASM.Models.ColorDetail", b =>
                 {
                     b.Property<int>("ColorDetailID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ColorDetailID"));
 
                     b.Property<string>("Color")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
                     b.HasKey("ColorDetailID");
 
                     b.ToTable("ColorDetail");
                 });
 
-            modelBuilder.Entity("testing1.Models.Customer", b =>
+            modelBuilder.Entity("ASM.Models.Customer", b =>
                 {
                     b.Property<int>("CustomerID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CustomerID"));
 
                     b.Property<string>("Address")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
                         .HasMaxLength(11)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(11)");
 
                     b.Property<int>("UserID")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.HasKey("CustomerID");
 
@@ -104,24 +118,26 @@ namespace ASM.Migrations
                     b.ToTable("Customer");
                 });
 
-            modelBuilder.Entity("testing1.Models.Order", b =>
+            modelBuilder.Entity("ASM.Models.Order", b =>
                 {
                     b.Property<int>("OrderID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderID"));
 
                     b.Property<int>("CustomerID")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("OrderDate")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<float?>("TotalPrice")
-                        .HasColumnType("REAL");
+                        .HasColumnType("real");
 
                     b.HasKey("OrderID");
 
@@ -130,23 +146,25 @@ namespace ASM.Migrations
                     b.ToTable("Order");
                 });
 
-            modelBuilder.Entity("testing1.Models.OrderDetail", b =>
+            modelBuilder.Entity("ASM.Models.OrderDetail", b =>
                 {
                     b.Property<int>("OrderDetailID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderDetailID"));
 
                     b.Property<int>("OrderID")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.Property<int>("ProductID")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.Property<int>("Quantity")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.Property<float>("UnitPrice")
-                        .HasColumnType("REAL");
+                        .HasColumnType("real");
 
                     b.HasKey("OrderDetailID");
 
@@ -157,41 +175,43 @@ namespace ASM.Migrations
                     b.ToTable("OrderDetail");
                 });
 
-            modelBuilder.Entity("testing1.Models.Product", b =>
+            modelBuilder.Entity("ASM.Models.Product", b =>
                 {
                     b.Property<int>("ProductId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProductId"));
 
                     b.Property<int>("CategoryID")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.Property<int>("ColorDetailID")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Image")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<float>("Price")
-                        .HasColumnType("REAL");
+                        .HasColumnType("real");
 
                     b.Property<string>("ProductName")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Quantity")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.Property<int>("SizeID")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.Property<int>("SupplierID")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.HasKey("ProductId");
 
@@ -206,37 +226,41 @@ namespace ASM.Migrations
                     b.ToTable("Product");
                 });
 
-            modelBuilder.Entity("testing1.Models.Size", b =>
+            modelBuilder.Entity("ASM.Models.Size", b =>
                 {
                     b.Property<int>("SizeID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SizeID"));
 
                     b.Property<int>("SizeNumber")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.HasKey("SizeID");
 
                     b.ToTable("Size");
                 });
 
-            modelBuilder.Entity("testing1.Models.Supplier", b =>
+            modelBuilder.Entity("ASM.Models.Supplier", b =>
                 {
                     b.Property<int>("SupplierID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SupplierID"));
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
                         .HasMaxLength(11)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(11)");
 
                     b.Property<int>("UserID")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.HasKey("SupplierID");
 
@@ -245,31 +269,33 @@ namespace ASM.Migrations
                     b.ToTable("Supplier");
                 });
 
-            modelBuilder.Entity("testing1.Models.User", b =>
+            modelBuilder.Entity("ASM.Models.User", b =>
                 {
                     b.Property<int>("UserID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserID"));
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<byte>("Role")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("tinyint");
 
                     b.HasKey("UserID");
 
                     b.ToTable("User");
                 });
 
-            modelBuilder.Entity("testing1.Models.Admin", b =>
+            modelBuilder.Entity("ASM.Models.Admin", b =>
                 {
-                    b.HasOne("testing1.Models.User", "User")
+                    b.HasOne("ASM.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserID")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -278,9 +304,9 @@ namespace ASM.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("testing1.Models.Customer", b =>
+            modelBuilder.Entity("ASM.Models.Customer", b =>
                 {
-                    b.HasOne("testing1.Models.User", "User")
+                    b.HasOne("ASM.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserID")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -289,9 +315,9 @@ namespace ASM.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("testing1.Models.Order", b =>
+            modelBuilder.Entity("ASM.Models.Order", b =>
                 {
-                    b.HasOne("testing1.Models.Customer", "Customer")
+                    b.HasOne("ASM.Models.Customer", "Customer")
                         .WithMany()
                         .HasForeignKey("CustomerID")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -300,15 +326,15 @@ namespace ASM.Migrations
                     b.Navigation("Customer");
                 });
 
-            modelBuilder.Entity("testing1.Models.OrderDetail", b =>
+            modelBuilder.Entity("ASM.Models.OrderDetail", b =>
                 {
-                    b.HasOne("testing1.Models.Order", "Order")
+                    b.HasOne("ASM.Models.Order", "Order")
                         .WithMany()
                         .HasForeignKey("OrderID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("testing1.Models.Product", "Product")
+                    b.HasOne("ASM.Models.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductID")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -319,27 +345,27 @@ namespace ASM.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("testing1.Models.Product", b =>
+            modelBuilder.Entity("ASM.Models.Product", b =>
                 {
-                    b.HasOne("testing1.Models.Category", "Category")
+                    b.HasOne("ASM.Models.Category", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("testing1.Models.ColorDetail", "ColorDetail")
+                    b.HasOne("ASM.Models.ColorDetail", "ColorDetail")
                         .WithMany()
                         .HasForeignKey("ColorDetailID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("testing1.Models.Size", "Size")
+                    b.HasOne("ASM.Models.Size", "Size")
                         .WithMany()
                         .HasForeignKey("SizeID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("testing1.Models.Supplier", "Supplier")
+                    b.HasOne("ASM.Models.Supplier", "Supplier")
                         .WithMany()
                         .HasForeignKey("SupplierID")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -354,9 +380,9 @@ namespace ASM.Migrations
                     b.Navigation("Supplier");
                 });
 
-            modelBuilder.Entity("testing1.Models.Supplier", b =>
+            modelBuilder.Entity("ASM.Models.Supplier", b =>
                 {
-                    b.HasOne("testing1.Models.User", "User")
+                    b.HasOne("ASM.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserID")
                         .OnDelete(DeleteBehavior.Cascade)

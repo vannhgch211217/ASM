@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace testing1.Models
+namespace ASM.Models
 {
 	public class User
 	{
