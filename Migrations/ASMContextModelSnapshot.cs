@@ -46,7 +46,7 @@ namespace ASM.Migrations
 
                     b.HasIndex("UserID");
 
-                    b.ToTable("Admin");
+                    b.ToTable("Admin", (string)null);
                 });
 
             modelBuilder.Entity("testing1.Models.Category", b =>
@@ -63,7 +63,7 @@ namespace ASM.Migrations
 
                     b.HasKey("CategoryID");
 
-                    b.ToTable("Category");
+                    b.ToTable("Category", (string)null);
                 });
 
             modelBuilder.Entity("testing1.Models.ColorDetail", b =>
@@ -80,7 +80,7 @@ namespace ASM.Migrations
 
                     b.HasKey("ColorDetailID");
 
-                    b.ToTable("ColorDetail");
+                    b.ToTable("ColorDetail", (string)null);
                 });
 
             modelBuilder.Entity("testing1.Models.Customer", b =>
@@ -111,7 +111,7 @@ namespace ASM.Migrations
 
                     b.HasIndex("UserID");
 
-                    b.ToTable("Customer");
+                    b.ToTable("Customer", (string)null);
                 });
 
             modelBuilder.Entity("testing1.Models.Order", b =>
@@ -139,7 +139,7 @@ namespace ASM.Migrations
 
                     b.HasIndex("CustomerID");
 
-                    b.ToTable("Order");
+                    b.ToTable("Order", (string)null);
                 });
 
             modelBuilder.Entity("testing1.Models.OrderDetail", b =>
@@ -168,7 +168,7 @@ namespace ASM.Migrations
 
                     b.HasIndex("ProductID");
 
-                    b.ToTable("OrderDetail");
+                    b.ToTable("OrderDetail", (string)null);
                 });
 
             modelBuilder.Entity("testing1.Models.Product", b =>
@@ -219,7 +219,7 @@ namespace ASM.Migrations
 
                     b.HasIndex("SupplierID");
 
-                    b.ToTable("Product");
+                    b.ToTable("Product", (string)null);
                 });
 
             modelBuilder.Entity("testing1.Models.Size", b =>
@@ -235,7 +235,7 @@ namespace ASM.Migrations
 
                     b.HasKey("SizeID");
 
-                    b.ToTable("Size");
+                    b.ToTable("Size", (string)null);
                 });
 
             modelBuilder.Entity("testing1.Models.Supplier", b =>
@@ -262,7 +262,7 @@ namespace ASM.Migrations
 
                     b.HasIndex("UserID");
 
-                    b.ToTable("Supplier");
+                    b.ToTable("Supplier", (string)null);
                 });
 
             modelBuilder.Entity("testing1.Models.User", b =>
@@ -286,7 +286,7 @@ namespace ASM.Migrations
 
                     b.HasKey("UserID");
 
-                    b.ToTable("User");
+                    b.ToTable("User", (string)null);
                 });
 
             modelBuilder.Entity("testing1.Models.Admin", b =>
