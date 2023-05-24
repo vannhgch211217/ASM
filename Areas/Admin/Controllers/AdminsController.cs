@@ -8,89 +8,93 @@ using Microsoft.EntityFrameworkCore;
 using ASM.Data;
 using ASM.Models;
 
-namespace ASM.Controllers
+namespace ASM.Areas.Controllers
 {
-    public class CategoriesController : Controller
+    [Area("Admin")]
+    public class AdminsController : Controller
     {
         private readonly ASMContext _context;
 
-        public CategoriesController(ASMContext context)
+        public AdminsController(ASMContext context)
         {
             _context = context;
         }
 
-        // GET: Categories
+        // GET: Admin/Admins
         public async Task<IActionResult> Index()
         {
-              return _context.Category != null ? 
-                          View(await _context.Category.ToListAsync()) :
-                          Problem("Entity set 'ASMContext.Category'  is null.");
+            var aSMContext = _context.Admin.Include(a => a.User);
+            return View(await aSMContext.ToListAsync());
         }
 
-        // GET: Categories/Details/5
+        // GET: Admin/Admins/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Category == null)
+            if (id == null || _context.Admin == null)
             {
                 return NotFound();
             }
 
-            var category = await _context.Category
-                .FirstOrDefaultAsync(m => m.CategoryID == id);
-            if (category == null)
+            var admin = await _context.Admin
+                .Include(a => a.User)
+                .FirstOrDefaultAsync(m => m.AdminID == id);
+            if (admin == null)
             {
                 return NotFound();
             }
 
-            return View(category);
+            return View(admin);
         }
 
-        // GET: Categories/Create
+        // GET: Admin/Admins/Create
         public IActionResult Create()
         {
+            ViewData["UserID"] = new SelectList(_context.User, "UserID", "UserID");
             return View();
         }
 
-        // POST: Categories/Create
+        // POST: Admin/Admins/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CategoryID,Name")] Category category)
+        public async Task<IActionResult> Create([Bind("AdminID,UserID,Name,PhoneNumber")] Admin admin)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(category);
+                _context.Add(admin);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(category);
+            ViewData["UserID"] = new SelectList(_context.User, "UserID", "UserID", admin.UserID);
+            return View(admin);
         }
 
-        // GET: Categories/Edit/5
+        // GET: Admin/Admins/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Category == null)
+            if (id == null || _context.Admin == null)
             {
                 return NotFound();
             }
 
-            var category = await _context.Category.FindAsync(id);
-            if (category == null)
+            var admin = await _context.Admin.FindAsync(id);
+            if (admin == null)
             {
                 return NotFound();
             }
-            return View(category);
+            ViewData["UserID"] = new SelectList(_context.User, "UserID", "UserID", admin.UserID);
+            return View(admin);
         }
 
-        // POST: Categories/Edit/5
+        // POST: Admin/Admins/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CategoryID,Name")] Category category)
+        public async Task<IActionResult> Edit(int id, [Bind("AdminID,UserID,Name,PhoneNumber")] Admin admin)
         {
-            if (id != category.CategoryID)
+            if (id != admin.AdminID)
             {
                 return NotFound();
             }
@@ -99,12 +103,12 @@ namespace ASM.Controllers
             {
                 try
                 {
-                    _context.Update(category);
+                    _context.Update(admin);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CategoryExists(category.CategoryID))
+                    if (!AdminExists(admin.AdminID))
                     {
                         return NotFound();
                     }
@@ -115,49 +119,51 @@ namespace ASM.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(category);
+            ViewData["UserID"] = new SelectList(_context.User, "UserID", "UserID", admin.UserID);
+            return View(admin);
         }
 
-        // GET: Categories/Delete/5
+        // GET: Admin/Admins/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Category == null)
+            if (id == null || _context.Admin == null)
             {
                 return NotFound();
             }
 
-            var category = await _context.Category
-                .FirstOrDefaultAsync(m => m.CategoryID == id);
-            if (category == null)
+            var admin = await _context.Admin
+                .Include(a => a.User)
+                .FirstOrDefaultAsync(m => m.AdminID == id);
+            if (admin == null)
             {
                 return NotFound();
             }
 
-            return View(category);
+            return View(admin);
         }
 
-        // POST: Categories/Delete/5
+        // POST: Admin/Admins/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Category == null)
+            if (_context.Admin == null)
             {
-                return Problem("Entity set 'ASMContext.Category'  is null.");
+                return Problem("Entity set 'ASMContext.Admin'  is null.");
             }
-            var category = await _context.Category.FindAsync(id);
-            if (category != null)
+            var admin = await _context.Admin.FindAsync(id);
+            if (admin != null)
             {
-                _context.Category.Remove(category);
+                _context.Admin.Remove(admin);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool CategoryExists(int id)
+        private bool AdminExists(int id)
         {
-          return (_context.Category?.Any(e => e.CategoryID == id)).GetValueOrDefault();
+            return (_context.Admin?.Any(e => e.AdminID == id)).GetValueOrDefault();
         }
     }
 }

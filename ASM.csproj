@@ -4,8 +4,6 @@
     <TargetFramework>net7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <DockerComposeProjectPath>docker-compose.dcproj</DockerComposeProjectPath>
-    <UserSecretsId>a70723ba-b412-43c5-af2f-e10adffda9e3</UserSecretsId>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'https' " />
@@ -23,6 +21,10 @@
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.5" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Areas\Admin\Data\" />
+    <Folder Include="Areas\Supplier\Data\" />
   </ItemGroup>
 
 </Project>

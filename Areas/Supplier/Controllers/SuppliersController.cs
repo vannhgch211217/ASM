@@ -8,89 +8,93 @@ using Microsoft.EntityFrameworkCore;
 using ASM.Data;
 using ASM.Models;
 
-namespace ASM.Controllers
+namespace ASM.Areas.Controllers
 {
-    public class UsersController : Controller
+    [Area("Supplier")]
+    public class SuppliersController : Controller
     {
         private readonly ASMContext _context;
 
-        public UsersController(ASMContext context)
+        public SuppliersController(ASMContext context)
         {
             _context = context;
         }
 
-        // GET: Users
+        // GET: Supplier/Suppliers
         public async Task<IActionResult> Index()
         {
-              return _context.User != null ? 
-                          View(await _context.User.ToListAsync()) :
-                          Problem("Entity set 'ASMContext.User'  is null.");
+            var aSMContext = _context.Supplier.Include(s => s.User);
+            return View(await aSMContext.ToListAsync());
         }
 
-        // GET: Users/Details/5
+        // GET: Supplier/Suppliers/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.User == null)
+            if (id == null || _context.Supplier == null)
             {
                 return NotFound();
             }
 
-            var user = await _context.User
-                .FirstOrDefaultAsync(m => m.UserID == id);
-            if (user == null)
+            var supplier = await _context.Supplier
+                .Include(s => s.User)
+                .FirstOrDefaultAsync(m => m.SupplierID == id);
+            if (supplier == null)
             {
                 return NotFound();
             }
 
-            return View(user);
+            return View(supplier);
         }
 
-        // GET: Users/Create
+        // GET: Supplier/Suppliers/Create
         public IActionResult Create()
         {
+            ViewData["UserID"] = new SelectList(_context.User, "UserID", "UserID");
             return View();
         }
 
-        // POST: Users/Create
+        // POST: Supplier/Suppliers/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("UserID,Email,Password,Role")] User user)
+        public async Task<IActionResult> Create([Bind("SupplierID,UserID,Name,PhoneNumber")] Supplier supplier)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(user);
+                _context.Add(supplier);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(user);
+            ViewData["UserID"] = new SelectList(_context.User, "UserID", "UserID", supplier.UserID);
+            return View(supplier);
         }
 
-        // GET: Users/Edit/5
+        // GET: Supplier/Suppliers/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.User == null)
+            if (id == null || _context.Supplier == null)
             {
                 return NotFound();
             }
 
-            var user = await _context.User.FindAsync(id);
-            if (user == null)
+            var supplier = await _context.Supplier.FindAsync(id);
+            if (supplier == null)
             {
                 return NotFound();
             }
-            return View(user);
+            ViewData["UserID"] = new SelectList(_context.User, "UserID", "UserID", supplier.UserID);
+            return View(supplier);
         }
 
-        // POST: Users/Edit/5
+        // POST: Supplier/Suppliers/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("UserID,Email,Password,Role")] User user)
+        public async Task<IActionResult> Edit(int id, [Bind("SupplierID,UserID,Name,PhoneNumber")] Supplier supplier)
         {
-            if (id != user.UserID)
+            if (id != supplier.SupplierID)
             {
                 return NotFound();
             }
@@ -99,12 +103,12 @@ namespace ASM.Controllers
             {
                 try
                 {
-                    _context.Update(user);
+                    _context.Update(supplier);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!UserExists(user.UserID))
+                    if (!SupplierExists(supplier.SupplierID))
                     {
                         return NotFound();
                     }
@@ -115,49 +119,51 @@ namespace ASM.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(user);
+            ViewData["UserID"] = new SelectList(_context.User, "UserID", "UserID", supplier.UserID);
+            return View(supplier);
         }
 
-        // GET: Users/Delete/5
+        // GET: Supplier/Suppliers/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.User == null)
+            if (id == null || _context.Supplier == null)
             {
                 return NotFound();
             }
 
-            var user = await _context.User
-                .FirstOrDefaultAsync(m => m.UserID == id);
-            if (user == null)
+            var supplier = await _context.Supplier
+                .Include(s => s.User)
+                .FirstOrDefaultAsync(m => m.SupplierID == id);
+            if (supplier == null)
             {
                 return NotFound();
             }
 
-            return View(user);
+            return View(supplier);
         }
 
-        // POST: Users/Delete/5
+        // POST: Supplier/Suppliers/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.User == null)
+            if (_context.Supplier == null)
             {
-                return Problem("Entity set 'ASMContext.User'  is null.");
+                return Problem("Entity set 'ASMContext.Supplier'  is null.");
             }
-            var user = await _context.User.FindAsync(id);
-            if (user != null)
+            var supplier = await _context.Supplier.FindAsync(id);
+            if (supplier != null)
             {
-                _context.User.Remove(user);
+                _context.Supplier.Remove(supplier);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool UserExists(int id)
+        private bool SupplierExists(int id)
         {
-          return (_context.User?.Any(e => e.UserID == id)).GetValueOrDefault();
+            return (_context.Supplier?.Any(e => e.SupplierID == id)).GetValueOrDefault();
         }
     }
 }

@@ -8,8 +8,9 @@ using Microsoft.EntityFrameworkCore;
 using ASM.Data;
 using ASM.Models;
 
-namespace ASM.Controllers
+namespace ASM.Areas.Controllers
 {
+    [Area("Supplier")]
     public class ProductsController : Controller
     {
         private readonly ASMContext _context;
@@ -19,14 +20,14 @@ namespace ASM.Controllers
             _context = context;
         }
 
-        // GET: Products
+        // GET: Supplier/Products
         public async Task<IActionResult> Index()
         {
             var aSMContext = _context.Product.Include(p => p.Category).Include(p => p.ColorDetail).Include(p => p.Size).Include(p => p.Supplier);
             return View(await aSMContext.ToListAsync());
         }
 
-        // GET: Products/Details/5
+        // GET: Supplier/Products/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Product == null)
@@ -48,17 +49,17 @@ namespace ASM.Controllers
             return View(product);
         }
 
-        // GET: Products/Create
+        // GET: Supplier/Products/Create
         public IActionResult Create()
         {
             ViewData["CategoryID"] = new SelectList(_context.Category, "CategoryID", "CategoryID");
             ViewData["ColorDetailID"] = new SelectList(_context.ColorDetail, "ColorDetailID", "ColorDetailID");
-            ViewData["SizeID"] = new SelectList(_context.Set<Size>(), "SizeID", "SizeID");
-            ViewData["SupplierID"] = new SelectList(_context.Set<Supplier>(), "SupplierID", "SupplierID");
+            ViewData["SizeID"] = new SelectList(_context.Size, "SizeID", "SizeID");
+            ViewData["SupplierID"] = new SelectList(_context.Supplier, "SupplierID", "SupplierID");
             return View();
         }
 
-        // POST: Products/Create
+        // POST: Supplier/Products/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -73,12 +74,12 @@ namespace ASM.Controllers
             }
             ViewData["CategoryID"] = new SelectList(_context.Category, "CategoryID", "CategoryID", product.CategoryID);
             ViewData["ColorDetailID"] = new SelectList(_context.ColorDetail, "ColorDetailID", "ColorDetailID", product.ColorDetailID);
-            ViewData["SizeID"] = new SelectList(_context.Set<Size>(), "SizeID", "SizeID", product.SizeID);
-            ViewData["SupplierID"] = new SelectList(_context.Set<Supplier>(), "SupplierID", "SupplierID", product.SupplierID);
+            ViewData["SizeID"] = new SelectList(_context.Size, "SizeID", "SizeID", product.SizeID);
+            ViewData["SupplierID"] = new SelectList(_context.Supplier, "SupplierID", "SupplierID", product.SupplierID);
             return View(product);
         }
 
-        // GET: Products/Edit/5
+        // GET: Supplier/Products/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Product == null)
@@ -93,12 +94,12 @@ namespace ASM.Controllers
             }
             ViewData["CategoryID"] = new SelectList(_context.Category, "CategoryID", "CategoryID", product.CategoryID);
             ViewData["ColorDetailID"] = new SelectList(_context.ColorDetail, "ColorDetailID", "ColorDetailID", product.ColorDetailID);
-            ViewData["SizeID"] = new SelectList(_context.Set<Size>(), "SizeID", "SizeID", product.SizeID);
-            ViewData["SupplierID"] = new SelectList(_context.Set<Supplier>(), "SupplierID", "SupplierID", product.SupplierID);
+            ViewData["SizeID"] = new SelectList(_context.Size, "SizeID", "SizeID", product.SizeID);
+            ViewData["SupplierID"] = new SelectList(_context.Supplier, "SupplierID", "SupplierID", product.SupplierID);
             return View(product);
         }
 
-        // POST: Products/Edit/5
+        // POST: Supplier/Products/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -132,12 +133,12 @@ namespace ASM.Controllers
             }
             ViewData["CategoryID"] = new SelectList(_context.Category, "CategoryID", "CategoryID", product.CategoryID);
             ViewData["ColorDetailID"] = new SelectList(_context.ColorDetail, "ColorDetailID", "ColorDetailID", product.ColorDetailID);
-            ViewData["SizeID"] = new SelectList(_context.Set<Size>(), "SizeID", "SizeID", product.SizeID);
-            ViewData["SupplierID"] = new SelectList(_context.Set<Supplier>(), "SupplierID", "SupplierID", product.SupplierID);
+            ViewData["SizeID"] = new SelectList(_context.Size, "SizeID", "SizeID", product.SizeID);
+            ViewData["SupplierID"] = new SelectList(_context.Supplier, "SupplierID", "SupplierID", product.SupplierID);
             return View(product);
         }
 
-        // GET: Products/Delete/5
+        // GET: Supplier/Products/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Product == null)
@@ -159,7 +160,7 @@ namespace ASM.Controllers
             return View(product);
         }
 
-        // POST: Products/Delete/5
+        // POST: Supplier/Products/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

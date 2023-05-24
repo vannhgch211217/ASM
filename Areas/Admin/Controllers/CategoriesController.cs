@@ -8,92 +8,90 @@ using Microsoft.EntityFrameworkCore;
 using ASM.Data;
 using ASM.Models;
 
-namespace ASM.Controllers
+namespace ASM.Areas.Controllers
 {
-    public class SuppliersController : Controller
+    [Area("Admin")]
+    public class CategoriesController : Controller
     {
         private readonly ASMContext _context;
 
-        public SuppliersController(ASMContext context)
+        public CategoriesController(ASMContext context)
         {
             _context = context;
         }
 
-        // GET: Suppliers
+        // GET: Admin/Categories
         public async Task<IActionResult> Index()
         {
-            var aSMContext = _context.Supplier.Include(s => s.User);
-            return View(await aSMContext.ToListAsync());
+              return _context.Category != null ? 
+                          View(await _context.Category.ToListAsync()) :
+                          Problem("Entity set 'ASMContext.Category'  is null.");
         }
 
-        // GET: Suppliers/Details/5
+        // GET: Admin/Categories/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Supplier == null)
+            if (id == null || _context.Category == null)
             {
                 return NotFound();
             }
 
-            var supplier = await _context.Supplier
-                .Include(s => s.User)
-                .FirstOrDefaultAsync(m => m.SupplierID == id);
-            if (supplier == null)
+            var category = await _context.Category
+                .FirstOrDefaultAsync(m => m.CategoryID == id);
+            if (category == null)
             {
                 return NotFound();
             }
 
-            return View(supplier);
+            return View(category);
         }
 
-        // GET: Suppliers/Create
+        // GET: Admin/Categories/Create
         public IActionResult Create()
         {
-            ViewData["UserID"] = new SelectList(_context.User, "UserID", "UserID");
             return View();
         }
 
-        // POST: Suppliers/Create
+        // POST: Admin/Categories/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("SupplierID,UserID,Name,PhoneNumber")] Supplier supplier)
+        public async Task<IActionResult> Create([Bind("CategoryID,Name")] Category category)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(supplier);
+                _context.Add(category);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UserID"] = new SelectList(_context.User, "UserID", "UserID", supplier.UserID);
-            return View(supplier);
+            return View(category);
         }
 
-        // GET: Suppliers/Edit/5
+        // GET: Admin/Categories/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Supplier == null)
+            if (id == null || _context.Category == null)
             {
                 return NotFound();
             }
 
-            var supplier = await _context.Supplier.FindAsync(id);
-            if (supplier == null)
+            var category = await _context.Category.FindAsync(id);
+            if (category == null)
             {
                 return NotFound();
             }
-            ViewData["UserID"] = new SelectList(_context.User, "UserID", "UserID", supplier.UserID);
-            return View(supplier);
+            return View(category);
         }
 
-        // POST: Suppliers/Edit/5
+        // POST: Admin/Categories/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("SupplierID,UserID,Name,PhoneNumber")] Supplier supplier)
+        public async Task<IActionResult> Edit(int id, [Bind("CategoryID,Name")] Category category)
         {
-            if (id != supplier.SupplierID)
+            if (id != category.CategoryID)
             {
                 return NotFound();
             }
@@ -102,12 +100,12 @@ namespace ASM.Controllers
             {
                 try
                 {
-                    _context.Update(supplier);
+                    _context.Update(category);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!SupplierExists(supplier.SupplierID))
+                    if (!CategoryExists(category.CategoryID))
                     {
                         return NotFound();
                     }
@@ -118,51 +116,49 @@ namespace ASM.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UserID"] = new SelectList(_context.User, "UserID", "UserID", supplier.UserID);
-            return View(supplier);
+            return View(category);
         }
 
-        // GET: Suppliers/Delete/5
+        // GET: Admin/Categories/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Supplier == null)
+            if (id == null || _context.Category == null)
             {
                 return NotFound();
             }
 
-            var supplier = await _context.Supplier
-                .Include(s => s.User)
-                .FirstOrDefaultAsync(m => m.SupplierID == id);
-            if (supplier == null)
+            var category = await _context.Category
+                .FirstOrDefaultAsync(m => m.CategoryID == id);
+            if (category == null)
             {
                 return NotFound();
             }
 
-            return View(supplier);
+            return View(category);
         }
 
-        // POST: Suppliers/Delete/5
+        // POST: Admin/Categories/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Supplier == null)
+            if (_context.Category == null)
             {
-                return Problem("Entity set 'ASMContext.Supplier'  is null.");
+                return Problem("Entity set 'ASMContext.Category'  is null.");
             }
-            var supplier = await _context.Supplier.FindAsync(id);
-            if (supplier != null)
+            var category = await _context.Category.FindAsync(id);
+            if (category != null)
             {
-                _context.Supplier.Remove(supplier);
+                _context.Category.Remove(category);
             }
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool SupplierExists(int id)
+        private bool CategoryExists(int id)
         {
-          return (_context.Supplier?.Any(e => e.SupplierID == id)).GetValueOrDefault();
+          return (_context.Category?.Any(e => e.CategoryID == id)).GetValueOrDefault();
         }
     }
 }
