@@ -16,13 +16,10 @@ namespace ASM.Data
 
         public DbSet<ASM.Models.User> User { get; set; } = default!;
 
-        public DbSet<ASM.Models.Admin> Admin { get; set; } = default!;
-
         public DbSet<ASM.Models.Category> Category { get; set; } = default!;
 
         public DbSet<ASM.Models.ColorDetail> ColorDetail { get; set; } = default!;
 
-        public DbSet<ASM.Models.Customer> Customer { get; set; } = default!;
 
         public DbSet<ASM.Models.Order> Order { get; set; } = default!;
 
@@ -31,7 +28,5 @@ namespace ASM.Data
         public DbSet<ASM.Models.Product> Product { get; set; } = default!;
 
         public DbSet<ASM.Models.Size> Size { get; set; } = default!;
-
-        public DbSet<ASM.Models.Supplier> Supplier { get; set; } = default!;
     }
 }

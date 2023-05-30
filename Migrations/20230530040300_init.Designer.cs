@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ASM.Migrations
 {
     [DbContext(typeof(ASMContext))]
-    [Migration("20230523171352_init")]
+    [Migration("20230530040300_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -24,33 +24,6 @@ namespace ASM.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("ASM.Models.Admin", b =>
-                {
-                    b.Property<int>("AdminID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AdminID"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasMaxLength(11)
-                        .HasColumnType("nvarchar(11)");
-
-                    b.Property<int>("UserID")
-                        .HasColumnType("int");
-
-                    b.HasKey("AdminID");
-
-                    b.HasIndex("UserID");
-
-                    b.ToTable("Admin");
-                });
 
             modelBuilder.Entity("ASM.Models.Category", b =>
                 {
@@ -87,37 +60,6 @@ namespace ASM.Migrations
                     b.ToTable("ColorDetail");
                 });
 
-            modelBuilder.Entity("ASM.Models.Customer", b =>
-                {
-                    b.Property<int>("CustomerID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CustomerID"));
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasMaxLength(11)
-                        .HasColumnType("nvarchar(11)");
-
-                    b.Property<int>("UserID")
-                        .HasColumnType("int");
-
-                    b.HasKey("CustomerID");
-
-                    b.HasIndex("UserID");
-
-                    b.ToTable("Customer");
-                });
-
             modelBuilder.Entity("ASM.Models.Order", b =>
                 {
                     b.Property<int>("OrderID")
@@ -125,9 +67,6 @@ namespace ASM.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderID"));
-
-                    b.Property<int>("CustomerID")
-                        .HasColumnType("int");
 
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
@@ -139,9 +78,12 @@ namespace ASM.Migrations
                     b.Property<float?>("TotalPrice")
                         .HasColumnType("real");
 
+                    b.Property<int>("UserID")
+                        .HasColumnType("int");
+
                     b.HasKey("OrderID");
 
-                    b.HasIndex("CustomerID");
+                    b.HasIndex("UserID");
 
                     b.ToTable("Order");
                 });
@@ -210,7 +152,7 @@ namespace ASM.Migrations
                     b.Property<int>("SizeID")
                         .HasColumnType("int");
 
-                    b.Property<int>("SupplierID")
+                    b.Property<int>("UserID")
                         .HasColumnType("int");
 
                     b.HasKey("ProductId");
@@ -221,7 +163,7 @@ namespace ASM.Migrations
 
                     b.HasIndex("SizeID");
 
-                    b.HasIndex("SupplierID");
+                    b.HasIndex("UserID");
 
                     b.ToTable("Product");
                 });
@@ -242,33 +184,6 @@ namespace ASM.Migrations
                     b.ToTable("Size");
                 });
 
-            modelBuilder.Entity("ASM.Models.Supplier", b =>
-                {
-                    b.Property<int>("SupplierID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SupplierID"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasMaxLength(11)
-                        .HasColumnType("nvarchar(11)");
-
-                    b.Property<int>("UserID")
-                        .HasColumnType("int");
-
-                    b.HasKey("SupplierID");
-
-                    b.HasIndex("UserID");
-
-                    b.ToTable("Supplier");
-                });
-
             modelBuilder.Entity("ASM.Models.User", b =>
                 {
                     b.Property<int>("UserID")
@@ -277,13 +192,25 @@ namespace ASM.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserID"));
 
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasMaxLength(11)
+                        .HasColumnType("nvarchar(11)");
 
                     b.Property<byte>("Role")
                         .HasColumnType("tinyint");
@@ -293,37 +220,15 @@ namespace ASM.Migrations
                     b.ToTable("User");
                 });
 
-            modelBuilder.Entity("ASM.Models.Admin", b =>
-                {
-                    b.HasOne("ASM.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("ASM.Models.Customer", b =>
-                {
-                    b.HasOne("ASM.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("ASM.Models.Order", b =>
                 {
-                    b.HasOne("ASM.Models.Customer", "Customer")
+                    b.HasOne("ASM.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("CustomerID")
+                        .HasForeignKey("UserID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Customer");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ASM.Models.OrderDetail", b =>
@@ -365,9 +270,9 @@ namespace ASM.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ASM.Models.Supplier", "Supplier")
+                    b.HasOne("ASM.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("SupplierID")
+                        .HasForeignKey("UserID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -376,17 +281,6 @@ namespace ASM.Migrations
                     b.Navigation("ColorDetail");
 
                     b.Navigation("Size");
-
-                    b.Navigation("Supplier");
-                });
-
-            modelBuilder.Entity("ASM.Models.Supplier", b =>
-                {
-                    b.HasOne("ASM.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
 
                     b.Navigation("User");
                 });

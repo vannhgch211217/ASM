@@ -17,7 +17,12 @@ namespace ASM.Models
 		 */ 
 		public Byte Role { get; set; }
 
-		//Testing push nè
-	}
+		public String Name { get; set; }
+
+        [MaxLength(11), RegularExpression(@"^\d{3}-\d{3}-\d{4}$", ErrorMessage = "Invalid phone number format.")]
+        public String PhoneNumber { get; set; }
+
+        public String? Address { get; set; }
+    }
 }
 

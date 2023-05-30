@@ -9,10 +9,10 @@ namespace ASM.Models
         [Key]
         public int OrderID { get; set; }
 
-        [Display(Name = "Customer")]
-        public virtual int CustomerID { get; set; }
-        [ForeignKey("CustomerID")]
-        public Customer Customer { get; set; }
+        [Display(Name = "User")]
+        public virtual int UserID { get; set; }
+        [ForeignKey("UserID")]
+        public User User { get; set; }
 
         public DateTime OrderDate { get; set; }
 
