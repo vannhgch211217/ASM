@@ -15,11 +15,11 @@ namespace ASM.Models
 		/*
 		 * Byte 0 (Admin), 1 (Customer), 2 (Supplier)
 		 */ 
-		public Byte Role { get; set; }
+		public String Role { get; set; }
 
 		public String Name { get; set; }
 
-        [MaxLength(11), RegularExpression(@"^\d{3}-\d{3}-\d{4}$", ErrorMessage = "Invalid phone number format.")]
+        [MaxLength(13), RegularExpression(@"^\d{4}\d{3}\d{3}$", ErrorMessage = "Invalid phone number format.")]
         public String PhoneNumber { get; set; }
 
         public String? Address { get; set; }

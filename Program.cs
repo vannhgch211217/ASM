@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using ASM.Data;
+using ASM.Controllers;
+
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ASMContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("ASMContext") ?? throw new InvalidOperationException("Connection string 'ASMContext' not found.")));
@@ -19,6 +21,8 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
+//builder.Services.AddMvc().AddControllersAsServices();
 
 
 app.UseHttpsRedirection();
@@ -39,5 +43,15 @@ app.UseEndpoints(endpoints =>
       pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
     );
 });
+
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllerRoute(
+        name: "login",
+        pattern: "/login",
+        defaults: new { controller = "Auth", action = "Index" });
+});
+
 
 app.Run();
