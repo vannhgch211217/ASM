@@ -2,53 +2,59 @@
 
 @{
     ViewData["Title"] = "Register";
+    Layout = "~/Views/Shared/_AuthLayout.cshtml";
 }
 
 <h1 class="text-center">Register new account</h1>
 
 <hr />
-<div class="row d-flex justify-content-center">
-    <div class="col-md-6">
-        <form asp-action="Register">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="mb-3">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
+<div class="d-flex justify-content-center mt-5">
+    <div class="border p-3 rounded">
+        <div class="d-flex justify-content-center">
+            <div class="m-3">
+                <h3 class="text-center">Registers</h3>
+                <form asp-action="Register">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="mb-3">
+                        <label asp-for="Email" class="control-label"></label>
+                        <input asp-for="Email" class="form-control" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Password" class="control-label"></label>
+                        <input asp-for="Password" class="form-control" type="password"/>
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Role" class="control-label"></label>
+                        <input asp-for="Role" class="form-control" />
+                        <span asp-validation-for="Role" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Name" class="control-label"></label>
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="PhoneNumber" class="control-label"></label>
+                        <input asp-for="PhoneNumber" class="form-control" />
+                        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Address" class="control-label"></label>
+                        <input asp-for="Address" class="form-control" />
+                        <span asp-validation-for="Address" class="text-danger"></span>
+                    </div>
+                    <div class="text-center">
+                        <input type="submit" value="Create" class="btn btn-danger" />
+                    </div>
+                </form>
             </div>
-            <div class="mb-3">
-                <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" class="form-control" />
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
-            <div class="mb-3">
-                <label asp-for="Role" class="control-label"></label>
-                <input asp-for="Role" class="form-control" />
-                <span asp-validation-for="Role" class="text-danger"></span>
-            </div>
-            <div class="mb-3">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="mb-3">
-                <label asp-for="PhoneNumber" class="control-label"></label>
-                <input asp-for="PhoneNumber" class="form-control" />
-                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
-            </div>
-            <div class="mb-3">
-                <label asp-for="Address" class="control-label"></label>
-                <input asp-for="Address" class="form-control" />
-                <span asp-validation-for="Address" class="text-danger"></span>
-            </div>
-            <div class="mb-3 text-center">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
+        </div>
 
-<div>
-    <a asp-action="Login" class="d-flex justify-content-center">Back to Login</a>
+        <div>
+            <a asp-action="Login" class="d-flex justify-content-center text-danger">Back to Login</a>
+        </div>
+    </div>
 </div>
 

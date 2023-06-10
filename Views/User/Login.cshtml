@@ -8,30 +8,35 @@
 <h1 class="text-center">Login</h1>
 
 <hr />
-<div style="height:300px; width:1500px;margin-top:100px">
-    <div class="row d-flex justify-content-center align-items-center ">
-        <div class="col-md-6">
-            <form asp-action="Login">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div class="mb-3">
-                    <label asp-for="Email" class="control-label"></label>
-                    <input asp-for="Email" class="form-control" />
-                    <span asp-validation-for="Email" class="text-danger"></span>
+<div class="d-flex justify-content-center mt-5">
+    <div class="border p-2 rounded">
+        <div class="d-flex justify-content-center">
+            <div class="m-5">
+                <h3 class ="text-center">Login</h3>
+                <form asp-action="Login">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="mb-3">
+                        <label asp-for="Email" class="control-label"></label>
+                        <input asp-for="Email" class="form-control" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Password" class="control-label"></label>
+                        <input asp-for="Password" class="form-control" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3 text-center">
+                        <input type="submit" value="Login" class="btn btn-danger" />
+                    </div>
+                </form>
+                <div>
+                    <p class="d-flex justify-content-center">Don't have account! <a asp-action="Register" class="d-flex justify-content-center ml-2 text-danger">Register here</a></p>
                 </div>
-                <div class="mb-3">
-                    <label asp-for="Password" class="control-label"></label>
-                    <input asp-for="Password" class="form-control" />
-                    <span asp-validation-for="Password" class="text-danger"></span>
-                </div>
-                <div class="mb-3 text-center">
-                    <input type="submit" value="Login" class="btn btn-primary" />
-                </div>
-            </form>
-        </div>
-    </div>
+            </div>
 
-    <div>
-        <p class="d-flex justify-content-center">Don't have account! <a asp-action="Register" class="d-flex justify-content-center ms-1">Register here</a></p>
+        </div>
+
+        
     </div>
 </div>
 

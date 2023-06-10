@@ -7,11 +7,16 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ASM.Data;
 using ASM.Models;
+using BCrypt;
 
 namespace ASM.Controllers
 {
     public class UserController : Controller
     {
+        public const string SessionKeyName = "Username";
+        public const string SessionKeyEmail = "UserEmail";
+        public const string SessionKeyPhone = "UserPhone";
+
         private readonly ASMContext _context;
 
         public UserController(ASMContext context)
@@ -61,12 +66,14 @@ namespace ASM.Controllers
         {
             if (ModelState.IsValid)
             {
+                user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
                 _context.Add(user);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Login));
             }
             return View(user);
         }
+
 
         [HttpGet("/login")]
         public IActionResult Login()
@@ -81,19 +88,23 @@ namespace ASM.Controllers
             try
             {
                 var user = _context.User.FirstOrDefault(u => u.Email == email);
+
                 if (user == null)
                 {
                     TempData["AlertMessage"] = "User not found";
                     return RedirectToAction("Error");
                 }
 
-                if (user.Email == email && user.Password == password)
+                if (user.Email == email && BCrypt.Net.BCrypt.Verify(password, user.Password))
                 {
-                    return Redirect("./user");
+                    HttpContext.Session.SetString(SessionKeyName, user.Name);
+                    HttpContext.Session.SetString(SessionKeyEmail, user.Email);
+                    HttpContext.Session.SetString(SessionKeyPhone, user.PhoneNumber);
+                    return Redirect("/home/index");
                 }
                 else
                 {
-                    TempData["AlertMessage"] = "User not found";
+                    TempData["AlertMessage"] = "Invalid username or password";
                     return RedirectToAction("Error");
                 }
             }

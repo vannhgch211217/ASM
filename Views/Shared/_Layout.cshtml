@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Http
+@{
+    var session = Context.Request.HttpContext.Session;
+}
+
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -12,7 +17,7 @@
     <title>Sixteen Clothing HTML Template</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <!--
 
     TemplateMo 546 Sixteen Clothing
@@ -24,6 +29,7 @@
     <link rel="stylesheet" href="../assets/css/fontawesome.css">
     <link rel="stylesheet" href="../assets/css/templatemo-sixteen.css">
     <link rel="stylesheet" href="../assets/css/owl.css">
+
 
 </head>
 
@@ -42,8 +48,7 @@
     <header class="">
         <nav class="navbar navbar-expand-lg">
             <div class="container">
-                <a class="navbar-brand" href="index.html"><h2>Sixteen <em>Clothing</em></h2></a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                <a class="navbar-brand" href="/"><img style="width:90px;height:60px" src="../images/logo_asm1.png" /></a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarResponsive">
@@ -63,19 +68,32 @@
                         <li class="nav-item">
                             <a class="nav-link" href="contact.html">Contact Us</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/login">Login</a>
-                        </li>
+                        @if (string.IsNullOrEmpty(@session.GetString("Username")))
+                        {
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="/login">Login</a>
+                            </li>
+                        }
+                         else
+                        {
+                            <li class="nav-item">
+                                <a class="text nav-link">Hello: @session.GetString("Username")</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/register">Logout</a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
 
-    
-        <main role="main">
-            @RenderBody()
-        </main>
+
+    <main role="main">
+        @RenderBody()
+    </main>
 
     <footer>
         <div class="container">
@@ -95,16 +113,15 @@
 
 
     <!-- Bootstrap core JavaScript -->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="../vendor/jquery/jquery.min.js"></script>
+    <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-
-    <!-- Additional Scripts -->
-    <script src="assets/js/custom.js"></script>
-    <script src="assets/js/owl.js"></script>
-    <script src="assets/js/slick.js"></script>
-    <script src="assets/js/isotope.js"></script>
-    <script src="assets/js/accordions.js"></script>
+    <!-- Addition../al Scripts -->
+    <script src="../assets/js/custom.js"></script>
+    <script src="../assets/js/owl.js"></script>
+    <script src="../assets/js/slick.js"></script>
+    <script src="../assets/js/isotope.js"></script>
+    <script src="../assets/js/accordions.js"></script>
 
 
     <script language="text/Javascript">cleared[0] = cleared[1] = cleared[2] = 0; //set a cleared flag for each field

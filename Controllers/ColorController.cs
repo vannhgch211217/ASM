@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,87 +10,87 @@ using ASM.Models;
 
 namespace ASM.Controllers
 {
-    public class SizesController : Controller
+    public class ColorController : Controller
     {
         private readonly ASMContext _context;
 
-        public SizesController(ASMContext context)
+        public ColorController(ASMContext context)
         {
             _context = context;
         }
 
-        // GET: Sizes
+        // GET: Color
         public async Task<IActionResult> Index()
         {
-              return _context.Size != null ? 
-                          View(await _context.Size.ToListAsync()) :
-                          Problem("Entity set 'ASMContext.Size'  is null.");
+              return _context.ColorDetail != null ? 
+                          View(await _context.ColorDetail.ToListAsync()) :
+                          Problem("Entity set 'ASMContext.ColorDetail'  is null.");
         }
 
-        // GET: Sizes/Details/5
+        // GET: Color/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Size == null)
+            if (id == null || _context.ColorDetail == null)
             {
                 return NotFound();
             }
 
-            var size = await _context.Size
-                .FirstOrDefaultAsync(m => m.SizeID == id);
-            if (size == null)
+            var colorDetail = await _context.ColorDetail
+                .FirstOrDefaultAsync(m => m.ColorDetailID == id);
+            if (colorDetail == null)
             {
                 return NotFound();
             }
 
-            return View(size);
+            return View(colorDetail);
         }
 
-        // GET: Sizes/Create
+        // GET: Color/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Sizes/Create
+        // POST: Color/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("SizeID,SizeNumber")] Size size)
+        public async Task<IActionResult> Create([Bind("ColorDetailID,Color")] ColorDetail colorDetail)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(size);
+                _context.Add(colorDetail);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(size);
+            return View(colorDetail);
         }
 
-        // GET: Sizes/Edit/5
+        // GET: Color/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Size == null)
+            if (id == null || _context.ColorDetail == null)
             {
                 return NotFound();
             }
 
-            var size = await _context.Size.FindAsync(id);
-            if (size == null)
+            var colorDetail = await _context.ColorDetail.FindAsync(id);
+            if (colorDetail == null)
             {
                 return NotFound();
             }
-            return View(size);
+            return View(colorDetail);
         }
 
-        // POST: Sizes/Edit/5
+        // POST: Color/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("SizeID,SizeNumber")] Size size)
+        public async Task<IActionResult> Edit(int id, [Bind("ColorDetailID,Color")] ColorDetail colorDetail)
         {
-            if (id != size.SizeID)
+            if (id != colorDetail.ColorDetailID)
             {
                 return NotFound();
             }
@@ -99,12 +99,12 @@ namespace ASM.Controllers
             {
                 try
                 {
-                    _context.Update(size);
+                    _context.Update(colorDetail);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!SizeExists(size.SizeID))
+                    if (!ColorDetailExists(colorDetail.ColorDetailID))
                     {
                         return NotFound();
                     }
@@ -115,49 +115,49 @@ namespace ASM.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(size);
+            return View(colorDetail);
         }
 
-        // GET: Sizes/Delete/5
+        // GET: Color/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Size == null)
+            if (id == null || _context.ColorDetail == null)
             {
                 return NotFound();
             }
 
-            var size = await _context.Size
-                .FirstOrDefaultAsync(m => m.SizeID == id);
-            if (size == null)
+            var colorDetail = await _context.ColorDetail
+                .FirstOrDefaultAsync(m => m.ColorDetailID == id);
+            if (colorDetail == null)
             {
                 return NotFound();
             }
 
-            return View(size);
+            return View(colorDetail);
         }
 
-        // POST: Sizes/Delete/5
+        // POST: Color/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Size == null)
+            if (_context.ColorDetail == null)
             {
-                return Problem("Entity set 'ASMContext.Size'  is null.");
+                return Problem("Entity set 'ASMContext.ColorDetail'  is null.");
             }
-            var size = await _context.Size.FindAsync(id);
-            if (size != null)
+            var colorDetail = await _context.ColorDetail.FindAsync(id);
+            if (colorDetail != null)
             {
-                _context.Size.Remove(size);
+                _context.ColorDetail.Remove(colorDetail);
             }
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool SizeExists(int id)
+        private bool ColorDetailExists(int id)
         {
-          return (_context.Size?.Any(e => e.SizeID == id)).GetValueOrDefault();
+          return (_context.ColorDetail?.Any(e => e.ColorDetailID == id)).GetValueOrDefault();
         }
     }
 }

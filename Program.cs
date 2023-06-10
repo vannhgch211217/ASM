@@ -12,6 +12,15 @@ builder.Services.AddDbContext<ASMContext>(options =>
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddDistributedMemoryCache();
+
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromSeconds(10);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -30,11 +39,17 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseSession();
+
 app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.MapControllerRoute(
+    name: "size",
+    pattern: "{controller=Size}/{action=Index}/{id?}");
 
 app.UseEndpoints(endpoints =>
 {
@@ -42,15 +57,6 @@ app.UseEndpoints(endpoints =>
       name: "areas",
       pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
     );
-});
-
-
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapControllerRoute(
-        name: "login",
-        pattern: "/login",
-        defaults: new { controller = "Auth", action = "Index" });
 });
 
 
