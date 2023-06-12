@@ -9,6 +9,12 @@
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'https' " />
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'http' " />
   <ItemGroup>
+    <Compile Remove="Views\Auth\**" />
+    <Content Remove="Views\Auth\**" />
+    <EmbeddedResource Remove="Views\Auth\**" />
+    <None Remove="Views\Auth\**" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.5">
       <PrivateAssets>all</PrivateAssets>
@@ -27,7 +33,6 @@
   <ItemGroup>
     <Folder Include="Areas\Admin\Data\" />
     <Folder Include="Areas\Admin\Controllers\" />
-    <Folder Include="Views\Auth\" />
     <Folder Include="wwwroot\images\" />
   </ItemGroup>
 
