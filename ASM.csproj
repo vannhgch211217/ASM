@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
@@ -26,17 +26,101 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\Admin\Data\" />
-    <Folder Include="Areas\Admin\Controllers\" />
+    <Folder Include="Areas\Admin\Models\" />
     <Folder Include="Views\Auth\" />
     <Folder Include="wwwroot\images\" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Areas\Admin\Controllers\" />
     <None Remove="Views\Auth\" />
   </ItemGroup>
   <ItemGroup>
     <Content Remove="Views\User\Create.cshtml" />
     <Content Remove="wwwroot\images\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Areas\Admin\Views\Admin\Index.cshtml" />
+    <None Include="Areas\Admin\Views\Shared\Layout.cshtml" />
+    <None Include="wwwroot\admin\css\maps\style.css.map" />
+    <None Include="wwwroot\admin\images\.DS_Store" />
+    <None Include="wwwroot\admin\images\faces\.DS_Store" />
+    <None Include="wwwroot\admin\images\file-icons\.DS_Store" />
+    <None Include="wwwroot\admin\images\file-icons\128\.DS_Store" />
+    <None Include="wwwroot\admin\images\file-icons\256\.DS_Store" />
+    <None Include="wwwroot\admin\images\file-icons\512\.DS_Store" />
+    <None Include="wwwroot\admin\images\file-icons\64\.DS_Store" />
+    <None Include="wwwroot\admin\images\logo.svg" />
+    <None Include="wwwroot\admin\images\logo_mini.svg" />
+    <None Include="wwwroot\admin\images\logo_white.svg" />
+    <None Include="wwwroot\admin\images\sprites\logo-mini.svg" />
+    <None Include="wwwroot\admin\js\ace.js" />
+    <None Include="wwwroot\admin\js\alerts.js" />
+    <None Include="wwwroot\admin\js\avgrund.js" />
+    <None Include="wwwroot\admin\js\bootstrap-table.js" />
+    <None Include="wwwroot\admin\js\bt-maxLength.js" />
+    <None Include="wwwroot\admin\js\c3.js" />
+    <None Include="wwwroot\admin\js\calendar.js" />
+    <None Include="wwwroot\admin\js\chart.js" />
+    <None Include="wwwroot\admin\js\chartist.js" />
+    <None Include="wwwroot\admin\js\circle-progress.js" />
+    <None Include="wwwroot\admin\js\clipboard.js" />
+    <None Include="wwwroot\admin\js\codeEditor.js" />
+    <None Include="wwwroot\admin\js\codemirror.js" />
+    <None Include="wwwroot\admin\js\context-menu.js" />
+    <None Include="wwwroot\admin\js\cropper.js" />
+    <None Include="wwwroot\admin\js\dashboard.js" />
+    <None Include="wwwroot\admin\js\data-table.js" />
+    <None Include="wwwroot\admin\js\db.js" />
+    <None Include="wwwroot\admin\js\demo.js" />
+    <None Include="wwwroot\admin\js\desktop-notification.js" />
+    <None Include="wwwroot\admin\js\dragula.js" />
+    <None Include="wwwroot\admin\js\dropify.js" />
+    <None Include="wwwroot\admin\js\dropzone.js" />
+    <None Include="wwwroot\admin\js\editorDemo.js" />
+    <None Include="wwwroot\admin\js\file-upload.js" />
+    <None Include="wwwroot\admin\js\float-chart.js" />
+    <None Include="wwwroot\admin\js\form-addons.js" />
+    <None Include="wwwroot\admin\js\form-repeater.js" />
+    <None Include="wwwroot\admin\js\form-validation.js" />
+    <None Include="wwwroot\admin\js\formpickers.js" />
+    <None Include="wwwroot\admin\js\google-charts.js" />
+    <None Include="wwwroot\admin\js\google-maps.js" />
+    <None Include="wwwroot\admin\js\hoverable-collapse.js" />
+    <None Include="wwwroot\admin\js\iCheck.js" />
+    <None Include="wwwroot\admin\js\ion-range-slider.js" />
+    <None Include="wwwroot\admin\js\jq.tablesort.js" />
+    <None Include="wwwroot\admin\js\jquery-file-upload.js" />
+    <None Include="wwwroot\admin\js\js-grid.js" />
+    <None Include="wwwroot\admin\js\just-gage.js" />
+    <None Include="wwwroot\admin\js\light-gallery.js" />
+    <None Include="wwwroot\admin\js\listify.js" />
+    <None Include="wwwroot\admin\js\mapeal.js" />
+    <None Include="wwwroot\admin\js\mapeal_example_2.js" />
+    <None Include="wwwroot\admin\js\mapeal_example_3.js" />
+    <None Include="wwwroot\admin\js\mapiel.js" />
+    <None Include="wwwroot\admin\js\maps.js" />
+    <None Include="wwwroot\admin\js\misc.js" />
+    <None Include="wwwroot\admin\js\modal-demo.js" />
+    <None Include="wwwroot\admin\js\morris.js" />
+    <None Include="wwwroot\admin\js\no-ui-slider.js" />
+    <None Include="wwwroot\admin\js\off-canvas.js" />
+    <None Include="wwwroot\admin\js\owl-carousel.js" />
+    <None Include="wwwroot\admin\js\paginate.js" />
+    <None Include="wwwroot\admin\js\popover.js" />
+    <None Include="wwwroot\admin\js\progress-bar.js" />
+    <None Include="wwwroot\admin\js\rickshaw.js" />
+    <None Include="wwwroot\admin\js\select2.js" />
+    <None Include="wwwroot\admin\js\settings.js" />
+    <None Include="wwwroot\admin\js\sparkline.js" />
+    <None Include="wwwroot\admin\js\tablesorter.js" />
+    <None Include="wwwroot\admin\js\tabs.js" />
+    <None Include="wwwroot\admin\js\tight-grid.js" />
+    <None Include="wwwroot\admin\js\toastDemo.js" />
+    <None Include="wwwroot\admin\js\todolist.js" />
+    <None Include="wwwroot\admin\js\tooltips.js" />
+    <None Include="wwwroot\admin\js\tour.js" />
+    <None Include="wwwroot\admin\js\typeahead.js" />
+    <None Include="wwwroot\admin\js\wizard.js" />
+    <None Include="wwwroot\admin\js\x-editable.js" />
   </ItemGroup>
 </Project>
