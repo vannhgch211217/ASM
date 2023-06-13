@@ -51,10 +51,10 @@ namespace ASM.Controllers
         // GET: Product/Create
         public IActionResult Create()
         {
-            ViewData["CategoryID"] = new SelectList(_context.Category, "CategoryID", "CategoryID");
-            ViewData["ColorDetailID"] = new SelectList(_context.ColorDetail, "ColorDetailID", "ColorDetailID");
-            ViewData["SizeID"] = new SelectList(_context.Size, "SizeID", "SizeID");
-            ViewData["UserID"] = new SelectList(_context.User, "UserID", "UserID");
+            ViewData["CategoryID"] = new SelectList(_context.Category, "CategoryID", "Name");
+            ViewData["ColorDetailID"] = new SelectList(_context.ColorDetail, "ColorDetailID", "Color");
+            ViewData["SizeID"] = new SelectList(_context.Size, "SizeID", "SizeNumber");
+            ViewData["UserID"] = new SelectList(_context.User, "UserID", "Name");
             return View();
         }
 
