@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ASM.Data;
 using ASM.Models;
+using System.Drawing;
 
 namespace ASM.Areas.Admin.Controllers
 {
@@ -41,7 +42,7 @@ namespace ASM.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost("Admin/Sizes/Create")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("SizeID,SizeNumber")] Size size)
+        public async Task<IActionResult> Create([Bind("SizeID,SizeNumber")] Models.Size size)
         {
             
                 _context.Add(size);
@@ -51,7 +52,7 @@ namespace ASM.Areas.Admin.Controllers
         }
 
         // GET: Admin/Sizes/Edit/5
-        [Route("Admin/Sizes/Edit")]
+        [HttpGet("Admin/Sizes/Edit/{id}")]
 
         public async Task<IActionResult> Edit(int? id)
         {
@@ -71,19 +72,22 @@ namespace ASM.Areas.Admin.Controllers
         // POST: Admin/Sizes/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost("Admin/Sizes/Edit")]
+        [HttpPost("Admin/Sizes/Edit/{id}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("SizeID,SizeNumber")] Size size)
+        public async Task<IActionResult> Edit(int id, [Bind("SizeID,SizeNumber")] Models.Size size)
         {
             if (id != size.SizeID)
             {
                 return NotFound();
             }
 
+            if (ModelState.IsValid)
+            {
                 try
                 {
                     _context.Update(size);
                     await _context.SaveChangesAsync();
+                    
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -96,13 +100,13 @@ namespace ASM.Areas.Admin.Controllers
                         throw;
                     }
                 }
-
-
+                return RedirectToAction(nameof(Index));
+            }
             return View(size);
         }
 
         // GET: Admin/Sizes/Delete/5\
-        [Route("Admin/Sizes/Delete")]
+        [HttpGet("Admin/Sizes/Delete/{id}")]
 
         public async Task<IActionResult> Delete(int? id)
         {
@@ -122,7 +126,7 @@ namespace ASM.Areas.Admin.Controllers
         }
 
         // POST: Admin/Sizes/Delete/5
-        [HttpPost("Admin/Sizes/Delete"), ActionName("Delete")]
+        [HttpPost("Admin/Sizes/Delete/{id}"), ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
