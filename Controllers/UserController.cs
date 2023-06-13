@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ASM.Data;
 using ASM.Models;
-using BCrypt;
 
 namespace ASM.Controllers
 {
@@ -74,6 +73,14 @@ namespace ASM.Controllers
             return View(user);
         }
 
+        [HttpGet("/logout")]
+        public async Task<IActionResult> Logout()
+        {
+            HttpContext.Session.Remove(SessionKeyName);
+            HttpContext.Session.Remove(SessionKeyEmail);
+            HttpContext.Session.Remove(SessionKeyPhone);
+            return Redirect("/home/index");
+        }
 
         [HttpGet("/login")]
         public IActionResult Login()
@@ -91,21 +98,23 @@ namespace ASM.Controllers
 
                 if (user == null)
                 {
-                    TempData["AlertMessage"] = "User not found";
-                    return RedirectToAction("Error");
-                }
+                    string script = "<script>alert('User not found');window.location='/login';</script>";
+                    return Content(script, "text/html");
+                } else
+                {
+                    if (user.Email == email && BCrypt.Net.BCrypt.Verify(password, user.Password))
+                    {
+                        HttpContext.Session.SetString(SessionKeyName, user.Name);
+                        HttpContext.Session.SetString(SessionKeyEmail, user.Email);
+                        HttpContext.Session.SetString(SessionKeyPhone, user.PhoneNumber);
+                        return Redirect("/home/index");
+                    }
+                    else
+                    {
+                        string script = "<script>alert('Invalid username or password');window.location='/login';</script>";
+                        return Content(script, "text/html");
+                    }
 
-                if (user.Email == email && BCrypt.Net.BCrypt.Verify(password, user.Password))
-                {
-                    HttpContext.Session.SetString(SessionKeyName, user.Name);
-                    HttpContext.Session.SetString(SessionKeyEmail, user.Email);
-                    HttpContext.Session.SetString(SessionKeyPhone, user.PhoneNumber);
-                    return Redirect("/home/index");
-                }
-                else
-                {
-                    TempData["AlertMessage"] = "Invalid username or password";
-                    return RedirectToAction("Error");
                 }
             }
             catch (Exception ex)
@@ -213,6 +222,38 @@ namespace ASM.Controllers
             string alertMessage = TempData["AlertMessage"] as string;
             ViewBag.AlertMessage = alertMessage;
             return View();
+        }
+
+        [HttpGet("/profile")]
+        public IActionResult profile()
+        {
+            string userEmail = HttpContext.Session.GetString("UserEmail");
+            Console.WriteLine("User Email: " + userEmail);
+            var user = _context.User.FirstOrDefault(u => u.Email == userEmail);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+            return View("Profile", user);
+        }
+
+        [HttpPost("/profile")]
+        public async Task<IActionResult> updateProfile(User updatedUser)
+        {
+            String userEmail = HttpContext.Session.GetString(SessionKeyEmail);
+            var user = await _context.User.FirstOrDefaultAsync(u => u.Email == userEmail);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            user.Name = updatedUser.Name;
+            user.Email = updatedUser.Email;
+            user.Address = updatedUser.Address;
+            user.PhoneNumber = updatedUser.PhoneNumber;
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(profile));
         }
     }
 }
