@@ -33,6 +33,10 @@
   <ItemGroup>
     <Folder Include="Areas\Admin\Data\" />
     <Folder Include="Areas\Admin\Models\" />
+    <Folder Include="Areas\Suppiler\Controllers\" />
+    <Folder Include="Areas\Suppiler\Data\" />
+    <Folder Include="Areas\Suppiler\Models\" />
+    <Folder Include="Areas\Suppiler\Views\" />
     <Folder Include="Views\Auth\" />
     <Folder Include="wwwroot\images\" />
   </ItemGroup>
