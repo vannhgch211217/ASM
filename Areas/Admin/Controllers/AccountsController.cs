@@ -21,6 +21,7 @@ namespace ASM.Areas.Admin.Controllers
         }
 
         // GET: Admin/Accounts
+        [HttpGet("/Admin/Accounts")]
         public async Task<IActionResult> Index()
         {
               return _context.User != null ? 
@@ -29,6 +30,7 @@ namespace ASM.Areas.Admin.Controllers
         }
 
         // GET: Admin/Accounts/Edit/5
+        [HttpGet("Admin/Accounts/Edit/{id}")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.User == null)
@@ -47,7 +49,7 @@ namespace ASM.Areas.Admin.Controllers
         // POST: Admin/Accounts/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+        [HttpPost("Admin/Accounts/Edit/{id}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("UserID,Email,Password,Role,Name,PhoneNumber,Address")] User user)
         {
@@ -80,6 +82,7 @@ namespace ASM.Areas.Admin.Controllers
         }
 
         // GET: Admin/Accounts/Delete/5
+        [HttpGet("Admin/Accounts/Delete/{id}")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.User == null)
@@ -98,7 +101,7 @@ namespace ASM.Areas.Admin.Controllers
         }
 
         // POST: Admin/Accounts/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost("Admin/Accounts/Delete/{id}"), ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {

@@ -124,7 +124,7 @@ namespace ASM.Controllers
             }
         }
 
-        // GET: User/Edit/5
+        /*// GET: User/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.User == null)
@@ -210,7 +210,7 @@ namespace ASM.Controllers
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
-        }
+        }*/
 
         private bool UserExists(int id)
         {
