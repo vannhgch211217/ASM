@@ -52,13 +52,14 @@ namespace ASM.Areas.Suppiler.Controllers
 
         // GET: Suppiler/Product/Create
         [HttpGet("/Suppiler/Product/Create")]
-        public IActionResult Create()
+        public IActionResult CreateProduct()
         {
             ViewData["CategoryID"] = new SelectList(_context.Category, "CategoryID", "CategoryID");
             ViewData["ColorDetailID"] = new SelectList(_context.ColorDetail, "ColorDetailID", "ColorDetailID");
             ViewData["SizeID"] = new SelectList(_context.Size, "SizeID", "SizeID");
             ViewData["UserID"] = new SelectList(_context.User, "UserID", "UserID");
-            return View();
+            Console.Write("Hello");
+            return View("Create");
         }
 
         // POST: Suppiler/Product/Create
@@ -68,11 +69,18 @@ namespace ASM.Areas.Suppiler.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ProductId,UserID,CategoryID,SizeID,ColorDetailID,ProductName,Price,Quantity,Description,Image")] Product product)
         {
+            try
+            {
                 Console.WriteLine(product);
                 _context.Add(product);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
-            
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return View("Error", ex.Message);
+            }
         }
 
         // GET: Suppiler/Product/Edit/5
