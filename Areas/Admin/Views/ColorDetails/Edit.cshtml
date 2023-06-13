@@ -1,4 +1,5 @@
 ﻿@model ASM.Models.ColorDetail
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
 @{
     ViewData["Title"] = "Edit";
@@ -9,7 +10,12 @@
 
 <h4>ColorDetail</h4>
 <hr />
-<div class="row">
+<div class="content-wrapper">
+    <div class="row">
+        <div class="col-lg-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -25,6 +31,9 @@
         </form>
     </div>
 </div>
+                </div>
+            </div>
+        </div>
 
 <div>
     <a asp-action="Index">Back to List</a>

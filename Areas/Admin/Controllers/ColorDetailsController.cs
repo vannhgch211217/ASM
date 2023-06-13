@@ -21,6 +21,7 @@ namespace ASM.Areas.Admin.Controllers
         }
 
         // GET: Admin/ColorDetails
+        [HttpGet("/Admin/ColorDetails")]
         public async Task<IActionResult> Index()
         {
               return _context.ColorDetail != null ? 
@@ -28,25 +29,9 @@ namespace ASM.Areas.Admin.Controllers
                           Problem("Entity set 'ASMContext.ColorDetail'  is null.");
         }
 
-        // GET: Admin/ColorDetails/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null || _context.ColorDetail == null)
-            {
-                return NotFound();
-            }
-
-            var colorDetail = await _context.ColorDetail
-                .FirstOrDefaultAsync(m => m.ColorDetailID == id);
-            if (colorDetail == null)
-            {
-                return NotFound();
-            }
-
-            return View(colorDetail);
-        }
 
         // GET: Admin/ColorDetails/Create
+        [Route("Admin/ColorDetails/Create")]
         public IActionResult Create()
         {
             return View();
@@ -55,7 +40,7 @@ namespace ASM.Areas.Admin.Controllers
         // POST: Admin/ColorDetails/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+        [HttpPost("Admin/ColorDetails/Create")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ColorDetailID,Color")] ColorDetail colorDetail)
         {
@@ -87,7 +72,7 @@ namespace ASM.Areas.Admin.Controllers
         // POST: Admin/ColorDetails/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+        [HttpPost("Admin/ColorDetails/Edit/{id}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ColorDetailID,Color")] ColorDetail colorDetail)
         {
@@ -120,6 +105,7 @@ namespace ASM.Areas.Admin.Controllers
         }
 
         // GET: Admin/ColorDetails/Delete/5
+        [HttpGet("Admin/ColorDetails/Delete/{id}")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.ColorDetail == null)
@@ -138,7 +124,7 @@ namespace ASM.Areas.Admin.Controllers
         }
 
         // POST: Admin/ColorDetails/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost("Admin/ColorDetails/Delete/{id}"), ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
