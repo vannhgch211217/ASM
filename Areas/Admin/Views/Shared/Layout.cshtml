@@ -32,19 +32,12 @@
                 <div class="collapse navbar-collapse" id="navbarResponsive">
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item active">
-                            <a class="nav-link" href="index.html">
-                                Home
-                                <span class="sr-only">(current)</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="products.html">Our Products</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="about.html">About Us</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="contact.html">Contact Us</a>
+                            <form asp-action="Index" method="get">
+                                <div class="input-group">
+                                    <span class="input-group-addon d-flex align-items-center"><i class="icon-magnifier icons"></i></span>
+                                    <input type="text" name="SearchString" class="form-control" placeholder="Search...">
+                                </div>
+                            </form>
                         </li>
                     </ul>
                 </div>
@@ -80,6 +73,12 @@
                         <li class="nav-item">
                             <a class="nav-link" href="Sizes">
                                 <span class="menu-title">Size Management</span>
+                                <i class="icon-wrench menu-icon"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="Orders">
+                                <span class="menu-title">Order Management</span>
                                 <i class="icon-wrench menu-icon"></i>
                             </a>
                         </li>

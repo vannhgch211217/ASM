@@ -23,11 +23,15 @@ namespace ASM.Areas.Admin.Controllers
 
         // GET: Admin/Sizes
         [HttpGet("/Admin/Sizes")]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString)
         {
-              return _context.Size != null ? 
-                          View(await _context.Size.ToListAsync()) :
-                          Problem("Entity set 'ASMContext.Size'  is null.");
+            var sz = from m in _context.Size select m;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                int number = int.Parse(searchString);
+                sz = sz.Where(s => s.SizeNumber.Equals(number));
+            }
+            return View(await sz.ToListAsync());
         }
 
         // GET: Admin/Sizes/Create
