@@ -79,7 +79,7 @@ namespace ASM.Controllers
             HttpContext.Session.Remove(SessionKeyName);
             HttpContext.Session.Remove(SessionKeyEmail);
             HttpContext.Session.Remove(SessionKeyPhone);
-            return Redirect("/home/index");
+            return Redirect("/");
         }
 
         [HttpGet("/login")]
@@ -107,7 +107,14 @@ namespace ASM.Controllers
                         HttpContext.Session.SetString(SessionKeyName, user.Name);
                         HttpContext.Session.SetString(SessionKeyEmail, user.Email);
                         HttpContext.Session.SetString(SessionKeyPhone, user.PhoneNumber);
-                        return Redirect("/home/index");
+                        if(user.Role == "Admin")
+                        {
+                            return Redirect("/Admin/Sizes");
+                        } else if (user.Role == "Supplier")
+                        {
+                            return Redirect("/Suppiler/Product");
+                        }
+                        return Redirect("/");
                     }
                     else
                     {

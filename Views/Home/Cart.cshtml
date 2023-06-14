@@ -1,8 +1,10 @@
 ﻿@model ASM.Models.Product
 @{
     ViewData["Title"] = "Cart";
+    var session = Context.Request.HttpContext.Session;
 }
 
+<p>@session.GetString("ProductName")</p>
 <section class="h-100 gradient-custom ">
     <div class="container py-5">
         <div class="row d-flex justify-content-center my-4 mt-5">

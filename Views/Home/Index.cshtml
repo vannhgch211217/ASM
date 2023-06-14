@@ -41,24 +41,19 @@
             </div>
             @foreach (var item in Model)
             {
-                <div class="col-md-4">
-                    <div class="product-item">
-                        <a href="#"><img src="assets/images/product_01.jpg" alt=""></a>
-                        <div class="down-content">
-                            <a href="#"><h4>@Html.DisplayFor(model => item.ProductName)</h4></a>
-                            <h6>$@Html.DisplayFor(model => item.Price)</h6>
-                            <p>@Html.DisplayFor(model => item.Description)</p>
-                            <ul class="stars">
-                                <li><i class="fa fa-star"></i></li>
-                                <li><i class="fa fa-star"></i></li>
-                                <li><i class="fa fa-star"></i></li>
-                                <li><i class="fa fa-star"></i></li>
-                                <li><i class="fa fa-star"></i></li>
-                            </ul>
-                            <span>Reviews (24)</span>
-                        </div>
+                    <div class="col-md-4">
+                        <form method="POST">
+                            <div class="product-item">
+                                <a href="#"><img src="assets/images/product_01.jpg" alt=""></a>
+                                <div class="down-content">
+                                    <a href="#"><h4>@Html.DisplayFor(model => item.ProductName)</h4></a>
+                                    <h6>$@Html.DisplayFor(model => item.Price)</h6>
+                                    <p>@Html.DisplayFor(model => item.Description)</p>
+                                    <button type="submit" class="btn btn-danger text-center">Add to cart</button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
-                </div>
             }
             
             <div class="col-md-4">

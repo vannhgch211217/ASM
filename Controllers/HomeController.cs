@@ -9,6 +9,7 @@ namespace ASM.Controllers
     public class HomeController : Controller
     {
         private readonly ASMContext _context;
+        public const string SessionProductName = "ProductName";
 
         public HomeController(ASMContext context)
         {
@@ -38,6 +39,14 @@ namespace ASM.Controllers
         public IActionResult Cart()
         {
             return View();
+        }
+
+        [HttpPost("/cart")]
+        public async Task<IActionResult> AddToCart(String productName)
+        {
+            HttpContext.Session.SetString(SessionProductName, productName);
+            Console.Write("123131");
+            return View("Cart");
         }
     }
 }
