@@ -42,13 +42,16 @@
             @foreach (var item in Model)
             {
                     <div class="col-md-4">
-                        <form method="POST">
+                    <form method="POST">
                             <div class="product-item">
                                 <a href="#"><img src="assets/images/product_01.jpg" alt=""></a>
                                 <div class="down-content">
                                     <a href="#"><h4>@Html.DisplayFor(model => item.ProductName)</h4></a>
                                     <h6>$@Html.DisplayFor(model => item.Price)</h6>
                                     <p>@Html.DisplayFor(model => item.Description)</p>
+                                <input type="hidden" name="productId" value="@item.ProductId" />
+                                <input type="hidden" name="productName" value="@item.ProductName" />
+                                <input type="hidden" name="productPrice" value="@item.Price" />
                                     <button type="submit" class="btn btn-danger text-center">Add to cart</button>
                                 </div>
                             </div>

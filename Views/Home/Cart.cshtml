@@ -1,4 +1,4 @@
-﻿@model ASM.Models.Product
+﻿@model List<ASM.Models.Product>
 @{
     ViewData["Title"] = "Cart";
     var session = Context.Request.HttpContext.Session;
@@ -15,123 +15,80 @@
                     </div>
                     <div class="card-body">
                         <!-- Single item -->
-                        <div class="row">
-                            <div class="col-lg-3 col-md-12 mb-4 mb-lg-0">
-                                <!-- Image -->
-                                <div class="bg-image hover-overlay hover-zoom ripple rounded" data-mdb-ripple-color="light">
-                                    <img src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/E-commerce/Vertical/12a.webp"
-                                         class="w-100" alt="Blue Jeans Jacket" />
-                                    <a href="#!">
-                                        <div class="mask" style="background-color: rgba(251, 251, 251, 0.2)"></div>
-                                    </a>
-                                </div>
-                                <!-- Image -->
-                            </div>
-
-                            <div class="col-lg-5 col-md-6 mb-4 mb-lg-0">
-                                <!-- Data -->
-                                <p><strong>Blue denim shirt</strong></p>
-                                <p>Color: blue</p>
-                                <p>Size: M</p>
-                                <button type="button" class="btn btn-danger btn-sm me-1 mb-2" data-mdb-toggle="tooltip"
-                                        title="Remove item">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                                <button type="button" class="btn btn-primary btn-sm mb-2" data-mdb-toggle="tooltip"
-                                        title="Move to the wish list">
-                                    <i class="fas fa-heart"></i>
-                                </button>
-                                <!-- Data -->
-                            </div>
-
-                            <div class="col-lg-4 col-md-6 mb-4 mb-lg-0">
-                                <!-- Quantity -->
-                                <div class="d-flex" style="max-width: 300px">
-                                    <button class="btn btn-primary mr-2 pr-2 pl-2"
-                                            onclick="this.parentNode.querySelector('input[type=number]').stepDown()" style="height:35px">
-                                        <i class="fas fa-minus"></i>
-                                    </button>
-
-                                    <div class="form-outline">
-                                        
-                                        <input id="form1" min="0" name="quantity" value="1" type="number" class="form-control" />
+                        @if (Model != null && Model.Count > 0)
+                        {
+                            @foreach (var item in Model)
+                            {
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-12 mb-4 mb-lg-0">
+                                        <!-- Image -->
+                                        <div class="bg-image hover-overlay hover-zoom ripple rounded" data-mdb-ripple-color="light">
+                                            <img src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/E-commerce/Vertical/12a.webp"
+                                            class="w-100" alt="Blue Jeans Jacket" />
+                                            <a href="#!">
+                                                <div class="mask" style="background-color: rgba(251, 251, 251, 0.2)"></div>
+                                            </a>
+                                        </div>
+                                        <!-- Image -->
                                     </div>
 
-                                    <button class="btn btn-primary ml-2 pr-2 pl-2"
-                                            onclick="this.parentNode.querySelector('input[type=number]').stepUp()" style="height:35px">
-                                        <i class="fas fa-plus"></i>
-                                    </button>
-                                </div>
-                                <!-- Quantity -->
-                                <!-- Price -->
-                                <p class="text-start text-md-center">
-                                    <strong>$17.99</strong>
-                                </p>
-                                <!-- Price -->
-                            </div>
-                        </div>
-                        <!-- Single item -->
-
-                        <hr class="my-4" />
-
-                        <!-- Single item -->
-                        <div class="row">
-                            <div class="col-lg-3 col-md-12 mb-4 mb-lg-0">
-                                <!-- Image -->
-                                <div class="bg-image hover-overlay hover-zoom ripple rounded" data-mdb-ripple-color="light">
-                                    <img src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/E-commerce/Vertical/13a.webp"
-                                         class="w-100" />
-                                    <a href="#!">
-                                        <div class="mask" style="background-color: rgba(251, 251, 251, 0.2)"></div>
-                                    </a>
-                                </div>
-                                <!-- Image -->
-                            </div>
-
-                            <div class="col-lg-5 col-md-6 mb-4 mb-lg-0">
-                                <!-- Data -->
-                                <p><strong>Red hoodie</strong></p>
-                                <p>Color: red</p>
-                                <p>Size: M</p>
-
-                                <button type="button" class="btn btn-danger btn-sm me-1 mb-2" data-mdb-toggle="tooltip"
+                                    <div class="col-lg-5 col-md-6 mb-4 mb-lg-0">
+                                        <!-- Data -->
+                                        <p><strong>@item.ProductName</strong></p>
+                                        <p>Color: blue</p>
+                                        <p>Size: M</p>
+                                        <button type="button" class="btn btn-danger btn-sm me-1 mb-2" data-mdb-toggle="tooltip"
                                         title="Remove item">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                                <button type="button" class="btn btn-primary btn-sm mb-2" data-mdb-toggle="tooltip"
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-primary btn-sm mb-2" data-mdb-toggle="tooltip"
                                         title="Move to the wish list">
-                                    <i class="fas fa-heart"></i>
-                                </button>
-                                <!-- Data -->
-                            </div>
-
-                            <div class="col-lg-4 col-md-6 mb-4 mb-lg-0">
-                                <!-- Quantity -->
-                                <div class="d-flex" style="max-width: 300px">
-                                    <button class="btn btn-primary mr-2 pr-2 pl-2"
-                                            onclick="this.parentNode.querySelector('input[type=number]').stepDown()" style="height:35px">
-                                        <i class="fas fa-minus"></i>
-                                    </button>
-
-                                    <div class="form-outline">
-
-                                        <input id="form1" min="0" name="quantity" value="1" type="number" class="form-control" />
+                                            <i class="fas fa-heart"></i>
+                                        </button>
+                                        <!-- Data -->
                                     </div>
 
-                                    <button class="btn btn-primary ml-2 pr-2 pl-2"
-                                            onclick="this.parentNode.querySelector('input[type=number]').stepUp()" style="height:35px">
-                                        <i class="fas fa-plus"></i>
-                                    </button>
+                                    <div class="col-lg-4 col-md-6 mb-4 mb-lg-0">
+                                        <!-- Quantity -->
+                                        <div class="d-flex" style="max-width: 300px">
+                                            <form asp-controller="Cart" asp-action="DecreaseQuantity" method="post">
+                                                <input type="hidden" name="productId" value="@item.ProductId" />
+                                                <button class="btn btn-primary ml-2 pr-2 pl-2"
+                                                        type="submit" style="height:35px">
+                                                    <i class="fas fa-minus"></i>
+                                                </button>
+                                            </form>
+
+                                            <div class="form-outline">
+                                                <input id="form1" min="0" name="quantity" value="@item.Quantity" type="number" class="form-control" />
+                                            </div>
+
+                                            <form asp-controller="Cart" asp-action="IncreaseQuantity" method="post">
+                                                <input type="hidden" name="productId" value="@item.ProductId" />
+                                                <button class="btn btn-primary mr-2 pr-2 pl-2"
+                                                        type="submit" style="height:35px">
+                                                    
+                                                    <i class="fas fa-plus"></i>
+                                                </button>
+                                            </form>
+                                            
+                                        </div>
+                                        <!-- Quantity -->
+                                        <!-- Price -->
+                                        <p class="text-start text-md-center">
+                                            <strong>$@(item.Price * item.Quantity)</strong>
+                                        </p>
+                                        <!-- Price -->
+                                    </div>
                                 </div>
-                                <!-- Quantity -->
-                                <!-- Price -->
-                                <p class="text-start text-md-center">
-                                    <strong>$17.99</strong>
-                                </p>
-                                <!-- Price -->
-                            </div>
-                        </div>
-                        <!-- Single item -->
+                                <hr class="my-4" />
+                            }
+                        } 
+                        else
+                        {
+                            <p>Your cart is empty.</p>
+                        }
+                        
                     </div>
                 </div>
                 <div class="card mb-4">
@@ -180,7 +137,7 @@
                                         <p class="mb-0">(including VAT)</p>
                                     </strong>
                                 </div>
-                                <span><strong>$53.98</strong></span>
+                                <span><strong>$@session.GetString("GrandTotal")</strong></span>
                             </li>
                         </ul>
 

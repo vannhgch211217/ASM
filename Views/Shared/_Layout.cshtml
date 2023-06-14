@@ -85,7 +85,7 @@
                                 </a>
                                 <div class="dropdown-menu text-center" aria-labelledby="navbarDropdown">
                                     <a class="dropdown-item" href="/profile">Profile</a>
-                                    <a class="dropdown-item" href="/">Logout</a>
+                                    <a class="dropdown-item" href="/logout" >Logout</a>
                                 </div>
                             </li>
 
@@ -123,7 +123,7 @@
         </div>
     </footer>
 
-
+    @RenderSection("Scripts", required: false)
     <!-- Bootstrap core JavaScript -->
     <script src="../vendor/jquery/jquery.min.js"></script>
     <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -144,6 +144,10 @@
                 t.style.color = '#fff';
             }
         }</script>
+
+    @section Scripts {
+        <script src="../Views/Home/Cart.cshtml"></script>
+    }
 
 
 </body>
