@@ -233,7 +233,7 @@ namespace ASM.Controllers
 
             if (user == null)
             {
-                return NotFound();
+                return Redirect("/login");
             }
             return View("Profile", user);
         }

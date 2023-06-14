@@ -13,6 +13,7 @@
     <Content Remove="Views\Auth\**" />
     <EmbeddedResource Remove="Views\Auth\**" />
     <None Remove="Views\Auth\**" />
+    <None Remove="Areas\Suppiler\Views\Shared\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.5" />
@@ -39,6 +40,7 @@
     <Folder Include="Areas\Suppiler\Views\" />
     <Folder Include="Views\Auth\" />
     <Folder Include="wwwroot\images\" />
+    <Folder Include="Areas\Suppiler\Views\Shared\" />
   </ItemGroup>
 
   <ItemGroup>
