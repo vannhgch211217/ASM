@@ -1,12 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using ASM.Data;
+using ASM.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using ASM.Data;
-using ASM.Models;
+using System.Diagnostics;
 
 namespace ASM.Areas.Suppiler.Controllers
 {
@@ -29,6 +26,7 @@ namespace ASM.Areas.Suppiler.Controllers
         }
 
         // GET: Suppiler/Product/Details/5
+        [HttpGet("/Suppiler/Product/Details/{id}")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Product == null)
@@ -67,23 +65,34 @@ namespace ASM.Areas.Suppiler.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost("/Suppiler/Product/Create")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProductId,UserID,CategoryID,SizeID,ColorDetailID,ProductName,Price,Quantity,Description,Image")] Product product)
+        public async Task<IActionResult> Create([Bind("ProductId,UserID,CategoryID,SizeID,ColorDetailID,ProductName,Price,Quantity,Description")] Product product, IFormFile imageFile)
         {
+            Debug.WriteLine(imageFile.FileName);
+
+            var imgPath = Path.Combine("wwwroot/images/ProductImage", imageFile.FileName);
+
+            using (var stream = System.IO.File.Create(imgPath))
+            {
+                await imageFile.CopyToAsync(stream);
+                product.Image = imageFile.FileName;
+            }
             try
             {
-                Console.WriteLine(product);
                 _context.Add(product);
                 await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex);
+
                 return View("Error", ex.Message);
             }
         }
 
         // GET: Suppiler/Product/Edit/5
+        [HttpGet("Suppiler/Product/Edit/{id}")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Product == null)
@@ -103,46 +112,47 @@ namespace ASM.Areas.Suppiler.Controllers
             return View(product);
         }
 
+
         // POST: Suppiler/Product/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+        [HttpPost("Suppiler/Product/Edit/{id}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ProductId,UserID,CategoryID,SizeID,ColorDetailID,ProductName,Price,Quantity,Description,Image")] Product product)
+        public async Task<IActionResult> Edit(int id, [Bind("ProductId,UserID,CategoryID,SizeID,ColorDetailID,ProductName,Price,Quantity,Description,Image")] Models.Product product)
         {
+
             if (id != product.ProductId)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            try
             {
-                try
-                {
-                    _context.Update(product);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ProductExists(product.ProductId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                _context.Update(product);
+                await _context.SaveChangesAsync();
             }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!ProductExists(product.ProductId))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
             ViewData["CategoryID"] = new SelectList(_context.Category, "CategoryID", "CategoryID", product.CategoryID);
             ViewData["ColorDetailID"] = new SelectList(_context.ColorDetail, "ColorDetailID", "ColorDetailID", product.ColorDetailID);
             ViewData["SizeID"] = new SelectList(_context.Size, "SizeID", "SizeID", product.SizeID);
             ViewData["UserID"] = new SelectList(_context.User, "UserID", "UserID", product.UserID);
-            return View(product);
+
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Suppiler/Product/Delete/5
+        [HttpGet("Suppiler/Product/Delete/{id}")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Product == null)
@@ -165,7 +175,7 @@ namespace ASM.Areas.Suppiler.Controllers
         }
 
         // POST: Suppiler/Product/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost("Suppiler/Product/Delete/{id}"), ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
@@ -178,14 +188,14 @@ namespace ASM.Areas.Suppiler.Controllers
             {
                 _context.Product.Remove(product);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool ProductExists(int id)
         {
-          return (_context.Product?.Any(e => e.ProductId == id)).GetValueOrDefault();
+            return (_context.Product?.Any(e => e.ProductId == id)).GetValueOrDefault();
         }
     }
 }
