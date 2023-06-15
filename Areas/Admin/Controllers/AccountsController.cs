@@ -30,7 +30,10 @@ namespace ASM.Areas.Admin.Controllers
             var accounts = from m in _context.User select m;
             if (!String.IsNullOrEmpty(searchString))
             {
-               accounts  = accounts.Where(s => s.Email.Contains(searchString));
+                if(searchString.Equals("User")|| searchString.Equals("Supplier"))
+                    accounts  = accounts.Where(s => s.Role.Contains(searchString));
+                else
+                    accounts = accounts.Where(s => s.Email.Contains(searchString));
             }
 
             return View(await accounts.ToListAsync());
