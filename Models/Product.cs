@@ -10,7 +10,7 @@ namespace ASM.Models
         public int ProductId { get; set; }
 
         [Display(Name = "User")]
-        public virtual int UserID { get; set; }
+        public virtual int UserID { get; set; } 
         [ForeignKey("UserID")]
         public User User { get; set; }
 

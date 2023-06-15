@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using ASM.Data;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using ASM.Data;
-using ASM.Models;
 
 namespace ASM.Areas.Admin.Controllers
 {
@@ -24,14 +18,42 @@ namespace ASM.Areas.Admin.Controllers
         [HttpGet("/Admin/OrderDetails")]
         public async Task<IActionResult> Index()
         {
-            var accounts = from m in _context.OrderDetail select m;
-            var groupedAccounts = accounts.GroupBy(a => a.Product.UserID);
+            var orderDetails = _context.OrderDetail.Include(od => od.Product);
+            var groupedOds = orderDetails.GroupBy(a => a.Product.UserID);
 
-            accounts = accounts.Where(s => s.Product.UserID == 2);
-            ViewBag.Count = accounts.Sum(a => a.Quantity * a.Product.Price);
+            float maxSum = 0;
+            float maxSum2 = 0;
+            
+            int maxSumSpupplierId = -1;
+            foreach (var odGroup in groupedOds)
+            {
+                float tempSum = odGroup.Sum(a => a.Quantity * a.Product.Price);
+                if (tempSum > maxSum)
+                {
+                    maxSum = tempSum;
+                    maxSumSpupplierId = odGroup.FirstOrDefault().Product.UserID;
+                }
+            }
+
+            ViewBag.Count1 = maxSum; 
+            ViewBag.MaxSumSpupplierId1 = maxSumSpupplierId;
+
+            foreach (var odGroup in groupedOds)
+            {
+                float tempSum = odGroup.Sum(a => a.Quantity * a.Product.Price);
+                if (tempSum > maxSum2&&tempSum<maxSum)
+                {
+                    maxSum = tempSum;
+                    maxSumSpupplierId = odGroup.FirstOrDefault().Product.UserID;
+                }
+            }
+            ViewBag.Count2 = maxSum;
+            ViewBag.MaxSumSpupplierId2 = maxSumSpupplierId;
 
             var aSMContext = _context.OrderDetail.Include(o => o.Order).Include(o => o.Product);
+
             return View(await aSMContext.ToListAsync());
+
         }
     }
 }
