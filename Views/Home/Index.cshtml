@@ -42,9 +42,9 @@
             @foreach (var item in Model)
             {
                     <div class="col-md-4">
-                    <form method="POST">
+                    <form method="POST" action="/add-to-cart">
                             <div class="product-item">
-                                <a href="#"><img src="assets/images/product_01.jpg" alt=""></a>
+                                <a href="#"><img src="/images/ProductImage/@item.Image" alt=""></a>
                                 <div class="down-content">
                                     <a href="#"><h4>@Html.DisplayFor(model => item.ProductName)</h4></a>
                                     <h6>$@Html.DisplayFor(model => item.Price)</h6>

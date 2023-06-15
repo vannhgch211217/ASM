@@ -47,6 +47,10 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Cart}/{action=Index}/{id?}");
+
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapAreaControllerRoute(

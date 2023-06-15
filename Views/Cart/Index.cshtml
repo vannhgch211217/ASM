@@ -1,4 +1,4 @@
-﻿@model List<ASM.Models.Product>
+﻿@*@model List<ASM.Models.Product>
 @{
     ViewData["Title"] = "Cart";
     var session = Context.Request.HttpContext.Session;
@@ -16,14 +16,14 @@
                         <h5 class="mb-0">Cart: @ViewBag.TotalItems Items</h5>
                     </div>
                     <div class="card-body">
-                        <!-- Single item -->
+                         Single item 
                         @if (cartItems != null && cartItems.Any())
                         {
                             @foreach (var item in cartItems)
                             {
                                 <div class="row">
                                     <div class="col-lg-3 col-md-12 mb-4 mb-lg-0">
-                                        <!-- Image -->
+                                         Image 
                                         <div class="bg-image hover-overlay hover-zoom ripple rounded" data-mdb-ripple-color="light">
                                             <img src="/images/ProductImage/@item.Image"
                                                  class="w-100" />
@@ -31,11 +31,11 @@
                                                 <div class="mask" style="background-color: rgba(251, 251, 251, 0.2)"></div>
                                             </a>
                                         </div>
-                                        <!-- Image -->
+                                         Image 
                                     </div>
 
                                     <div class="col-lg-5 col-md-6 mb-4 mb-lg-0">
-                                        <!-- Data -->
+                                         Data 
                                         <p><strong>@item.ProductName</strong></p>
                                         <p>Color: blue</p>
                                         <p>Size: M</p>
@@ -46,11 +46,11 @@
                                                 <i class="fas fa-trash"></i>
                                             </button>
                                         </form>
-                                        <!-- Data -->
+                                         Data 
                                     </div>
 
                                     <div class="col-lg-4 col-md-6 mb-4 mb-lg-0">
-                                        <!-- Quantity -->
+                                         Quantity 
                                         <div class="d-flex" style="max-width: 300px">
                                             <form asp-controller="Cart" asp-action="DecreaseQuantity" method="post">
                                                 <input type="hidden" name="productId" value="@item.ProductId" />
@@ -74,12 +74,12 @@
                                             </form>
 
                                         </div>
-                                        <!-- Quantity -->
-                                        <!-- Price -->
+                                         Quantity 
+                                         Price 
                                         <p class="text-start text-md-center">
                                             <strong>$@(item.Price * item.Quantity)</strong>
                                         </p>
-                                        <!-- Price -->
+                                         Price 
                                     </div>
                                 </div>
                                 <hr class="my-4" />
@@ -143,11 +143,11 @@
                         </ul>
 
                         <button type="button" class="btn btn-danger btn-lg btn-block">
-                            <a href="/checkout"> Go to checkout </a>
+                            Go to checkout
                         </button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</section>
+</section>*@

@@ -15,6 +15,7 @@ namespace ASM.Controllers
         public const string SessionKeyName = "Username";
         public const string SessionKeyEmail = "UserEmail";
         public const string SessionKeyPhone = "UserPhone";
+        public const string SessionAddress = "UserAddress";
 
         private readonly ASMContext _context;
 
@@ -65,6 +66,12 @@ namespace ASM.Controllers
         {
             if (ModelState.IsValid)
             {
+                var userInDb = _context.User.FirstOrDefault(u => u.Email == user.Email);
+                if(userInDb != null)
+                {
+                    string script = "<script>alert('User already exist');window.location='/register';</script>";
+                    return Content(script, "text/html");
+                }
                 user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
                 _context.Add(user);
                 await _context.SaveChangesAsync();
@@ -79,6 +86,7 @@ namespace ASM.Controllers
             HttpContext.Session.Remove(SessionKeyName);
             HttpContext.Session.Remove(SessionKeyEmail);
             HttpContext.Session.Remove(SessionKeyPhone);
+            HttpContext.Session.Remove(SessionAddress);
             return Redirect("/");
         }
 
@@ -107,7 +115,8 @@ namespace ASM.Controllers
                         HttpContext.Session.SetString(SessionKeyName, user.Name);
                         HttpContext.Session.SetString(SessionKeyEmail, user.Email);
                         HttpContext.Session.SetString(SessionKeyPhone, user.PhoneNumber);
-                        if(user.Role == "Admin")
+                        HttpContext.Session.SetString(SessionAddress, user.Address);
+                        if (user.Role == "Admin")
                         {
                             return Redirect("/Admin/Sizes");
                         } else if (user.Role == "Supplier")
@@ -174,5 +183,7 @@ namespace ASM.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(profile));
         }
+
+
     }
 }

@@ -18,6 +18,8 @@ namespace ASM.Models
 
         public float? TotalPrice { get; set; }
         public String Status { get; set; }
+
+        public List<OrderDetail> OrderDetails { get; set; }
     }
 }
 
