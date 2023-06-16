@@ -12,10 +12,10 @@ namespace ASM.Controllers
 {
     public class UserController : Controller
     {
-        public const string SessionKeyName = "Username";
+        //public const string SessionKeyName = "Username";
         public const string SessionKeyEmail = "UserEmail";
-        public const string SessionKeyPhone = "UserPhone";
-        public const string SessionAddress = "UserAddress";
+        //public const string SessionKeyPhone = "UserPhone";
+        //public const string SessionAddress = "UserAddress";
 
         private readonly ASMContext _context;
 
@@ -50,96 +50,6 @@ namespace ASM.Controllers
             return View(user);
         }
 
-        // GET: User/Createy
-        [HttpGet("/register")]
-        public IActionResult Register()
-        {
-            return View();
-        }
-
-        // POST: User/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost("/register")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register([Bind("UserID,Email,Password,Role,Name,PhoneNumber,Address")] User user)
-        {
-            if (ModelState.IsValid)
-            {
-                var userInDb = _context.User.FirstOrDefault(u => u.Email == user.Email);
-                if(userInDb != null)
-                {
-                    string script = "<script>alert('User already exist');window.location='/register';</script>";
-                    return Content(script, "text/html");
-                }
-                user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
-                _context.Add(user);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Login));
-            }
-            return View(user);
-        }
-
-        [HttpGet("/logout")]
-        public async Task<IActionResult> Logout()
-        {
-            HttpContext.Session.Remove(SessionKeyName);
-            HttpContext.Session.Remove(SessionKeyEmail);
-            HttpContext.Session.Remove(SessionKeyPhone);
-            HttpContext.Session.Remove(SessionAddress);
-            return Redirect("/");
-        }
-
-        [HttpGet("/login")]
-        public IActionResult Login()
-        {
-            return View();
-        }
-
-        [HttpPost("/login")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(String email, String password)
-        {
-            try
-            {
-                var user = _context.User.FirstOrDefault(u => u.Email == email);
-
-                if (user == null)
-                {
-                    string script = "<script>alert('User not found');window.location='/login';</script>";
-                    return Content(script, "text/html");
-                } else
-                {
-                    if (user.Email == email && BCrypt.Net.BCrypt.Verify(password, user.Password))
-                    {
-                        HttpContext.Session.SetString(SessionKeyName, user.Name);
-                        HttpContext.Session.SetString(SessionKeyEmail, user.Email);
-                        HttpContext.Session.SetString(SessionKeyPhone, user.PhoneNumber);
-                        HttpContext.Session.SetString(SessionAddress, user.Address);
-                        if (user.Role == "Admin")
-                        {
-                            return Redirect("/Admin/Sizes");
-                        } else if (user.Role == "Supplier")
-                        {
-                            return Redirect("/Suppiler/Product");
-                        }
-                        return Redirect("/");
-                    }
-                    else
-                    {
-                        string script = "<script>alert('Invalid username or password');window.location='/login';</script>";
-                        return Content(script, "text/html");
-                    }
-
-                }
-            }
-            catch (Exception ex)
-            {
-                ViewBag.Message = "An error occurred during login";
-                return View("Error");
-            }
-        }
-
         private bool UserExists(int id)
         {
           return (_context.User?.Any(e => e.UserID == id)).GetValueOrDefault();
@@ -156,7 +66,6 @@ namespace ASM.Controllers
         public IActionResult profile()
         {
             string userEmail = HttpContext.Session.GetString("UserEmail");
-            Console.WriteLine("User Email: " + userEmail);
             var user = _context.User.FirstOrDefault(u => u.Email == userEmail);
 
             if (user == null)

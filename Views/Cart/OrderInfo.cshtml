@@ -1,0 +1,89 @@
+﻿@model Tuple<List<Order>, List<OrderDetail>, int>
+
+@{
+    ViewData["Title"] = "Order Information";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Order Information</h2>
+
+<h3>Orders</h3>
+<table class="table text-center">
+    <thead>
+        <tr>
+            <th>Order ID</th>
+            <th>User Name</th>
+            <th>Order Date</th>
+            <th>Total Price</th>
+            <th>Status</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var order in Model.Item1)
+        {
+            <tr>
+                <td>@order.OrderID</td>
+                <td>@order.User.Name</td>
+                <td>@order.OrderDate</td>
+                <td>@order.TotalPrice</td>
+                <td>@order.Status</td>
+                <td>
+                    <button class="btn btn-danger text-center border pr-4 pl-4 ml-2" data-toggle="modal" data-target="#orderDetailModal-@order.OrderID">
+                        <a href="/orderInfo?orderId=@order.OrderID" class="text-light">
+                            Detail
+                        </a>
+                    </button>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@foreach (var order in Model.Item1)
+{
+    <!-- Modal for displaying order details -->
+    <div class="modal fade" id="orderDetailModal-@order.OrderID" tabindex="-1" role="dialog" aria-labelledby="orderDetailModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="orderDetailModalLabel">Order Details</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table class="table text-center">
+                        <thead>
+                            <tr>
+                                <th>OrderDetailId</th>
+                                <th>Order Date</th>
+                                <th>Product Name</th>
+                                <th>Unit Price</th>
+                                <th>Quantity</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                Console.WriteLine(@Model.Item3);
+                            }
+                            @foreach (var orderDetail in Model.Item2.Where(od => od.OrderID == @Model.Item3))
+                            {
+                                <tr>
+                                    <td>@orderDetail.OrderDetailID</td>
+                                    <td>@orderDetail.Order.OrderDate</td>
+                                    <td>@orderDetail.Product.ProductName</td>
+                                    <td>@orderDetail.UnitPrice</td>
+                                    <td>@orderDetail.Quantity</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
