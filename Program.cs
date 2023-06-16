@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using ASM.Data;
 using ASM.Controllers;
+using Microsoft.AspNetCore.HttpOverrides;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ASMContext>(options =>

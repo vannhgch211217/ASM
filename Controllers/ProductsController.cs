@@ -21,13 +21,20 @@ namespace ASM.Controllers
 
         // GET: Products
         [HttpGet("Products")]
-        public async Task<IActionResult> Products()
+        public async Task<IActionResult> Products(string keyword)
         {
-            var aSMContext = _context.Product.Include(p => p.Category).Include(p => p.ColorDetail).Include(p => p.Size).Include(p => p.User);
-            return View(await aSMContext.ToListAsync());
+            var products = from p in _context.Product
+                          select p;
+            if(!String.IsNullOrEmpty(keyword))
+            {   
+                products = products.Where(p=>p.ProductName.Contains(keyword));
+            }
+            
+            return View(await products.ToListAsync());
         }
 
         // GET: Products/Details/5
+        [HttpGet("Products/Details/{id}")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Product == null)
