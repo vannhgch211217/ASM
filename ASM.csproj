@@ -9,10 +9,6 @@
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'https' " />
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'http' " />
   <ItemGroup>
-    <Compile Remove="Views\Auth\**" />
-    <Content Remove="Views\Auth\**" />
-    <EmbeddedResource Remove="Views\Auth\**" />
-    <None Remove="Views\Auth\**" />
     <None Remove="Areas\Suppiler\Views\Shared\" />
     <None Remove="Views\Cart\" />
   </ItemGroup>
@@ -39,8 +35,8 @@
     <Folder Include="Areas\Suppiler\Data\" />
     <Folder Include="Areas\Suppiler\Models\" />
     <Folder Include="Views\Auth\" />
+    <Folder Include="wwwroot\images\" />
     <Folder Include="Areas\Suppiler\Views\Shared\" />
-    <Folder Include="Views\Cart\" />
   </ItemGroup>
 
   <ItemGroup>
