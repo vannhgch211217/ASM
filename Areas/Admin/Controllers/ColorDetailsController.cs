@@ -22,11 +22,15 @@ namespace ASM.Areas.Admin.Controllers
 
         // GET: Admin/ColorDetails
         [HttpGet("/Admin/ColorDetails")]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString)
         {
-              return _context.ColorDetail != null ? 
-                          View(await _context.ColorDetail.ToListAsync()) :
-                          Problem("Entity set 'ASMContext.ColorDetail'  is null.");
+            var color = from m in _context.ColorDetail select m;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                color = color.Where(s => s.Color.Contains(searchString));
+            }
+
+            return View(await color.ToListAsync());
         }
 
 

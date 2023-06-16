@@ -15,8 +15,9 @@
     <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900&display=swap" rel="stylesheet">
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+=======
 
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+
 
 
     <title>TVM Shopping Website</title>
@@ -89,14 +90,16 @@
                                 <div class="dropdown-menu text-center" aria-labelledby="navbarDropdown">
                                     <a class="dropdown-item" href="/profile">Profile</a>
                                     <a class="dropdown-item" href="/logout">Logout</a>
+                                    <a class="dropdown-item" href="/orderInfo">Order</a>
                                 </div>
                             </li>
 
                             <li>
                                 
                             </li>
-                            <i class="fa-regular fa-cart-shopping pt-3 pl-2" style="color: #ff2600;"></i>
-   
+                            <a href ="/cart">
+                                <i class="fa-regular fa-cart-shopping pt-3 pl-2" style="color: #ff2600;"></i>
+                            </a>
                         }
                     </ul>
                 </div>
@@ -125,7 +128,7 @@
         </div>
     </footer>
 
-
+    @RenderSection("Scripts", required: false)
     <!-- Bootstrap core JavaScript -->
     <script src="~/vendor/jquery/jquery.min.js"></script>
     <script src="~/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -146,6 +149,10 @@
                 t.style.color = '#fff';
             }
         }</script>
+
+    @section Scripts {
+        <script src="../Views/Home/Cart.cshtml"></script>
+    }
 
 
 </body>

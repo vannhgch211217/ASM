@@ -15,6 +15,7 @@ namespace ASM.Controllers
         public const string SessionKeyName = "Username";
         public const string SessionKeyEmail = "UserEmail";
         public const string SessionKeyPhone = "UserPhone";
+        public const string SessionAddress = "UserAddress";
 
         private readonly ASMContext _context;
 
@@ -65,6 +66,12 @@ namespace ASM.Controllers
         {
             if (ModelState.IsValid)
             {
+                var userInDb = _context.User.FirstOrDefault(u => u.Email == user.Email);
+                if(userInDb != null)
+                {
+                    string script = "<script>alert('User already exist');window.location='/register';</script>";
+                    return Content(script, "text/html");
+                }
                 user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
                 _context.Add(user);
                 await _context.SaveChangesAsync();
@@ -79,7 +86,8 @@ namespace ASM.Controllers
             HttpContext.Session.Remove(SessionKeyName);
             HttpContext.Session.Remove(SessionKeyEmail);
             HttpContext.Session.Remove(SessionKeyPhone);
-            return Redirect("/home/index");
+            HttpContext.Session.Remove(SessionAddress);
+            return Redirect("/");
         }
 
         [HttpGet("/login")]
@@ -107,7 +115,15 @@ namespace ASM.Controllers
                         HttpContext.Session.SetString(SessionKeyName, user.Name);
                         HttpContext.Session.SetString(SessionKeyEmail, user.Email);
                         HttpContext.Session.SetString(SessionKeyPhone, user.PhoneNumber);
-                        return Redirect("/home/index");
+                        HttpContext.Session.SetString(SessionAddress, user.Address);
+                        if (user.Role == "Admin")
+                        {
+                            return Redirect("/Admin/Sizes");
+                        } else if (user.Role == "Supplier")
+                        {
+                            return Redirect("/Suppiler/Product");
+                        }
+                        return Redirect("/");
                     }
                     else
                     {
@@ -123,94 +139,6 @@ namespace ASM.Controllers
                 return View("Error");
             }
         }
-
-        /*// GET: User/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null || _context.User == null)
-            {
-                return NotFound();
-            }
-
-            var user = await _context.User.FindAsync(id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-            return View(user);
-        }
-
-        // POST: User/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("UserID,Email,Password,Role,Name,PhoneNumber,Address")] User user)
-        {
-            if (id != user.UserID)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(user);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!UserExists(user.UserID))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(user);
-        }
-
-        // GET: User/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null || _context.User == null)
-            {
-                return NotFound();
-            }
-
-            var user = await _context.User
-                .FirstOrDefaultAsync(m => m.UserID == id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            return View(user);
-        }
-
-        // POST: User/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            if (_context.User == null)
-            {
-                return Problem("Entity set 'ASMContext.User'  is null.");
-            }
-            var user = await _context.User.FindAsync(id);
-            if (user != null)
-            {
-                _context.User.Remove(user);
-            }
-            
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }*/
 
         private bool UserExists(int id)
         {
@@ -255,5 +183,7 @@ namespace ASM.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(profile));
         }
+
+
     }
 }

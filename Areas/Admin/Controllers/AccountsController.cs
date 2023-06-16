@@ -14,7 +14,6 @@ namespace ASM.Areas.Admin.Controllers
     public class AccountsController : Controller
     {
         private readonly ASMContext _context;
-
         public AccountsController(ASMContext context)
         {
             _context = context;
@@ -22,11 +21,22 @@ namespace ASM.Areas.Admin.Controllers
 
         // GET: Admin/Accounts
         [HttpGet("/Admin/Accounts")]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString)
         {
-              return _context.User != null ? 
-                          View(await _context.User.ToListAsync()) :
-                          Problem("Entity set 'ASMContext.User'  is null.");
+            ViewBag.Count = _context.User.Count();
+            ViewBag.CountUser = _context.User.Count(a => a.Role == "User");
+            ViewBag.CountSupplier = _context.User.Count(a => a.Role == "Supplier");
+
+            var accounts = from m in _context.User select m;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                if(searchString.Equals("User")|| searchString.Equals("Supplier"))
+                    accounts  = accounts.Where(s => s.Role.Contains(searchString));
+                else
+                    accounts = accounts.Where(s => s.Email.Contains(searchString));
+            }
+
+            return View(await accounts.ToListAsync());
         }
 
         // GET: Admin/Accounts/Edit/5
@@ -101,7 +111,7 @@ namespace ASM.Areas.Admin.Controllers
         }
 
         // POST: Admin/Accounts/Delete/5
-        [HttpPost("Admin/Accounts/Delete/{id}"), ActionName("Delete")]
+        [HttpPost("Admin/Delete/{id}"), ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {

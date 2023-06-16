@@ -22,11 +22,15 @@ namespace ASM.Areas.Admin.Controllers
 
         // GET: Admin/Categories
         [HttpGet("/Admin/Categories")]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString)
         {
-              return _context.Category != null ? 
-                          View(await _context.Category.ToListAsync()) :
-                          Problem("Entity set 'ASMContext.Category'  is null.");
+            var cat = from m in _context.Category select m;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                cat = cat.Where(s => s.Name.Contains(searchString));
+            }
+
+            return View(await cat.ToListAsync());
         }
 
         // GET: Admin/Categories/Create

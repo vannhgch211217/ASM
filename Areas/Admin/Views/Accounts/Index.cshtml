@@ -9,15 +9,24 @@
         <div class="col-lg-12 grid-margin stretch-card">
             <div class="card">
                 <div class="card-body">
+                    <button style="margin-bottom: 20px;" class="btn btn-light" type="button" onclick="sortS()">
+                        Supplier list
+                    </button>
+                    <button style="margin-bottom: 20px;" class="btn btn-light" type="button" onclick="sortU()">User list</button>
+                    <script>
+                        function sortS() {
+                            window.location.href = '@Url.Action("Index", "Accounts")' + '?searchString=Supplier';
+                        }
+                        function sortU() {
+                            window.location.href = '@Url.Action("Index", "Accounts")' + '?searchString=User';
+                        }
+                    </script>
                     <h4 class="card-title">Basic Table</h4>
-<table class="table">
+                        <table class="table">
     <thead>
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.Email)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Password)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Role)
@@ -41,9 +50,6 @@
                 @Html.DisplayFor(modelItem => item.Email)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Password)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.Role)
             </td>
             <td>
@@ -63,6 +69,36 @@
 }
     </tbody>
 </table>
+                </div>
+                <div class="row section social-section">
+                    <div class="col-lg-4 grid-margin stretch-card">
+                        <div class="social-card w-100 bg-facebook">
+                            <div class="content">
+                                <p>+ @ViewBag.Count</p>
+                                <p>Total accounts</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 grid-margin stretch-card">
+                        <div class="social-card w-100 bg-twitter">
+                            <div class="content">
+                                <p>+ @ViewBag.CountUser</p>
+                                <p>Total users</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 grid-margin stretch-card">
+                        <div class="social-card w-100 bg-dribbble">
+                            <div class="content">
+                                <p>+ @ViewBag.CountSupplier</p>
+                                <p>Total supplier</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
 </div>
-</div>
-</div>
+

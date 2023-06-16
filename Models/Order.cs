@@ -1,4 +1,4 @@
-﻿using System;
+﻿    using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -18,6 +18,8 @@ namespace ASM.Models
 
         public float? TotalPrice { get; set; }
         public String Status { get; set; }
+
+        public List<OrderDetail> OrderDetails { get; set; }
     }
 }
 
