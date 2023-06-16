@@ -23,13 +23,17 @@ namespace ASM.Controllers
         [HttpGet("Products")]
         public async Task<IActionResult> Products(string keyword)
         {
-            var products = from p in _context.Product
-                          select p;
-            if(!String.IsNullOrEmpty(keyword))
-            {   
-                products = products.Where(p=>p.ProductName.Contains(keyword));
+            IQueryable<Product> products = _context.Product;
+
+            if (!String.IsNullOrEmpty(keyword))
+            {
+                products = products.Where(p => p.ProductName.Contains(keyword) || p.Category.Name.Contains(keyword));
             }
-            
+
+            products = products.Include(p => p.Category);
+
+            ViewData["CategoryID"] = new SelectList(_context.Category, "CategoryID", "Name");
+
             return View(await products.ToListAsync());
         }
 

@@ -145,9 +145,10 @@
                         <div class="filters">
                             <ul>
                                 <li class="active" data-filter="*">All Products</li>
-                                <li data-filter=".des">Featured</li>
-                                <li data-filter=".dev">Flash Deals</li>
-                                <li data-filter=".gra">Last Minute</li>
+                                @foreach (var category in ViewBag.CategoryID as SelectList)
+                                {
+                                    <li><a href="@Url.Action("Products", new { keyword = category.Text})">@category.Text</a></li>
+                                }
                             </ul>
                         </div>
                     </div>
