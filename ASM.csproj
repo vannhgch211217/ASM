@@ -34,6 +34,7 @@
     <Folder Include="Areas\Suppiler\Controllers\" />
     <Folder Include="Areas\Suppiler\Data\" />
     <Folder Include="Areas\Suppiler\Models\" />
+    <Folder Include="Views\Auth\" />
     <Folder Include="wwwroot\images\" />
     <Folder Include="Areas\Suppiler\Views\Shared\" />
   </ItemGroup>

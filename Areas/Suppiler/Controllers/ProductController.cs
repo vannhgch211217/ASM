@@ -52,11 +52,10 @@ namespace ASM.Areas.Suppiler.Controllers
         [HttpGet("/Suppiler/Product/Create")]
         public IActionResult CreateProduct()
         {
-            ViewData["CategoryID"] = new SelectList(_context.Category, "CategoryID", "CategoryID");
-            ViewData["ColorDetailID"] = new SelectList(_context.ColorDetail, "ColorDetailID", "ColorDetailID");
-            ViewData["SizeID"] = new SelectList(_context.Size, "SizeID", "SizeID");
+            ViewData["CategoryID"] = new SelectList(_context.Category, "CategoryID", "Name");
+            ViewData["ColorDetailID"] = new SelectList(_context.ColorDetail, "ColorDetailID", "Color");
+            ViewData["SizeID"] = new SelectList(_context.Size, "SizeID", "SizeNumber");
             ViewData["UserID"] = new SelectList(_context.User, "UserID", "UserID");
-            Console.Write("Hello");
             return View("Create");
         }
 
@@ -65,7 +64,41 @@ namespace ASM.Areas.Suppiler.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost("/Suppiler/Product/Create")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProductId,UserID,CategoryID,SizeID,ColorDetailID,ProductName,Price,Quantity,Description")] Product product, IFormFile imageFile)
+        public async Task<IActionResult> Create([Bind("ProductId,UserID,CategoryID,SizeID,ColorDetailID,ProductName,Price,Quantity,Description")] Product product, List<IFormFile> imageFiles)
+        {
+            try
+            {
+                // Create a list to store the image names
+                var imageNames = new List<string>();
+
+                foreach (var imageFile in imageFiles)
+                {
+                    var imgPath = Path.Combine("wwwroot/images/ProductImage", imageFile.FileName);
+
+                    using (var stream = System.IO.File.Create(imgPath))
+                    {
+                        await imageFile.CopyToAsync(stream);
+                        imageNames.Add(imageFile.FileName); // Add the image name to the list
+                    }
+                }
+
+                // Join the image names with a delimiter and assign it to the product's Images property
+                product.Image = string.Join(",", imageNames);
+
+                _context.Add(product);
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+
+                return View("Error", ex.Message);
+            }
+        }
+
+        /*public async Task<IActionResult> Create([Bind("ProductId,UserID,CategoryID,SizeID,ColorDetailID,ProductName,Price,Quantity,Description")] Product product, IFormFile imageFile)
         {
             Debug.WriteLine(imageFile.FileName);
 
@@ -89,7 +122,7 @@ namespace ASM.Areas.Suppiler.Controllers
 
                 return View("Error", ex.Message);
             }
-        }
+        }*/
 
         // GET: Suppiler/Product/Edit/5
         [HttpGet("Suppiler/Product/Edit/{id}")]
@@ -118,7 +151,58 @@ namespace ASM.Areas.Suppiler.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost("Suppiler/Product/Edit/{id}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ProductId,UserID,CategoryID,SizeID,ColorDetailID,ProductName,Price,Quantity,Description,Image")] Models.Product product)
+        public async Task<IActionResult> Edit(int id, [Bind("ProductId,UserID,CategoryID,SizeID,ColorDetailID,ProductName,Price,Quantity,Description")] Models.Product product, List<IFormFile> imageFiles)
+        {
+            if (id != product.ProductId)
+            {
+                return NotFound();
+            }
+
+            try
+            {
+                // Handle the uploaded images
+                if (imageFiles != null && imageFiles.Count > 0)
+                {
+                    // Delete the existing images from the server (if necessary)
+
+                    // Save the new images to the server and update the product's Images property
+                    var imageNames = new List<string>();
+                    foreach (var imageFile in imageFiles)
+                    {
+                        var imgPath = Path.Combine("wwwroot/images/ProductImage", imageFile.FileName);
+                        using (var stream = System.IO.File.Create(imgPath))
+                        {
+                            await imageFile.CopyToAsync(stream);
+                            imageNames.Add(imageFile.FileName);
+                        }
+                    }
+                    product.Image = string.Join(",", imageNames);
+                }
+
+                _context.Update(product);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!ProductExists(product.ProductId))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            ViewData["CategoryID"] = new SelectList(_context.Category, "CategoryID", "CategoryID", product.CategoryID);
+            ViewData["ColorDetailID"] = new SelectList(_context.ColorDetail, "ColorDetailID", "ColorDetailID", product.ColorDetailID);
+            ViewData["SizeID"] = new SelectList(_context.Size, "SizeID", "SizeID", product.SizeID);
+            ViewData["UserID"] = new SelectList(_context.User, "UserID", "UserID", product.UserID);
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        /*public async Task<IActionResult> Edit(int id, [Bind("ProductId,UserID,CategoryID,SizeID,ColorDetailID,ProductName,Price,Quantity,Description,Image")] Models.Product product)
         {
 
             if (id != product.ProductId)
@@ -149,7 +233,7 @@ namespace ASM.Areas.Suppiler.Controllers
             ViewData["UserID"] = new SelectList(_context.User, "UserID", "UserID", product.UserID);
 
             return RedirectToAction(nameof(Index));
-        }
+        }*/
 
         // GET: Suppiler/Product/Delete/5
         [HttpGet("Suppiler/Product/Delete/{id}")]

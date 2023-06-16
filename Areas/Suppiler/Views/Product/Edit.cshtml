@@ -17,7 +17,7 @@
 <hr />
 <div class="row justify-content-center">
     <div class="col-md-8">
-            <form asp-action="Edit" asp-controller="Product" method="post">
+            <form asp-action="Edit" asp-controller="Product" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="ProductId" />
             <div class="form-group">
@@ -61,10 +61,24 @@
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Image" class="control-label"></label>
-                <input asp-for="Image" class="form-control" name="Image"/>
+                <label asp-for="Image" class="control-label">Images</label>
+                <input type="file" multiple class="form-control" name="imageFiles" accept="image/*" />
                 <span asp-validation-for="Image" class="text-danger"></span>
             </div>
+            
+            <!-- Existing Images -->
+                @if (!string.IsNullOrEmpty(Model.Image))
+                {
+                    <div class="form-group">
+                        <label class="control-label">Existing Images:</label>
+                        <div>
+                            @foreach (var image in Model.Image.Split(","))
+                            {
+                                <img src="/images/ProductImage/@image" width="100" height="100" alt="Product Image" />
+                            }
+                        </div>
+                    </div>
+                }
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
