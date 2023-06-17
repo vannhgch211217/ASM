@@ -20,7 +20,7 @@ namespace ASM.Models
         public Category Category { get; set; }
 
         [Display(Name = "Size")]
-        public virtual int SizeID { get; set; }
+        public virtual int? SizeID { get; set; }
         [ForeignKey("SizeID")]
         public Size Size { get; set; }
 

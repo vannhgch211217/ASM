@@ -49,7 +49,6 @@
   <ItemGroup>
     <None Include="Areas\Admin\Views\Shared\Layout.cshtml" />
     <None Include="Areas\Admin\Views\Sizes\Create.cshtml" />
-    <None Include="Areas\Admin\Views\Sizes\Delete.cshtml" />
     <None Include="Areas\Admin\Views\Sizes\Edit.cshtml" />
     <None Include="Areas\Admin\Views\Sizes\Index.cshtml" />
     <None Include="wwwroot\admin\css\maps\style.css.map" />

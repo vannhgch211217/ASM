@@ -111,7 +111,7 @@ namespace ASM.Areas.Admin.Controllers
         }
 
         // POST: Admin/Accounts/Delete/5
-        [HttpPost("Admin/Delete/{id}"), ActionName("Delete")]
+        [HttpPost("Admin/Accounts/Delete/{id}"), ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
