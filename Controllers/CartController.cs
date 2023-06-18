@@ -41,13 +41,17 @@ namespace ASM.Controllers
         public IActionResult IncreaseQuantity(int productId)
         {
             string userEmail = HttpContext.Session.GetString("UserEmail");
+            var product = _context.Product.FirstOrDefault(x => x.ProductId == productId);
             List<Product> cart = HttpContext.Session.getJson<List<Product>>(userEmail + "Cart") ?? new List<Product>();
 
             Product existingProduct = cart.FirstOrDefault(p => p.ProductId == productId);
             if (existingProduct != null)
             {
                 existingProduct.Quantity++;
+                product.Quantity--;
+                _context.SaveChanges();
             }
+
 
             HttpContext.Session.setJson(userEmail + "Cart", cart);
 
@@ -62,11 +66,14 @@ namespace ASM.Controllers
         {
             string userEmail = HttpContext.Session.GetString("UserEmail");
             List<Product> cart = HttpContext.Session.getJson<List<Product>>(userEmail + "Cart") ?? new List<Product>();
+            var product = _context.Product.FirstOrDefault(x => x.ProductId == productId);
 
             Product existingProduct = cart.FirstOrDefault(p => p.ProductId == productId);
             if (existingProduct != null)
             {
                 existingProduct.Quantity--;
+                product.Quantity++;
+                _context.SaveChanges();
             }
 
             HttpContext.Session.setJson(userEmail + "Cart", cart);
@@ -82,11 +89,14 @@ namespace ASM.Controllers
         {
             string userEmail = HttpContext.Session.GetString("UserEmail");
             List<Product> cart = HttpContext.Session.getJson<List<Product>>(userEmail + "Cart") ?? new List<Product>();
+            var product = _context.Product.FirstOrDefault(x => x.ProductId == productId);
 
             Product productToRemove = cart.FirstOrDefault(p => p.ProductId == productId);
             if (productToRemove != null)
             {
                 cart.Remove(productToRemove);
+                product.Quantity += productToRemove.Quantity;
+                _context.SaveChanges();
             }
 
             HttpContext.Session.setJson(userEmail + "Cart", cart);

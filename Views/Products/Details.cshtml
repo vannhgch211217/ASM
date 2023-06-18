@@ -4,7 +4,7 @@
     ViewData["Title"] = "Details";
 
 }
-
+<form method="POST" action="/add-to-cart">
 <!DOCTYPE html>
 <html>
 <head>
@@ -18,6 +18,7 @@
 </head>
 
 <body>
+    
     <main class="container">
 
         <!-- Left Column / Headphones Image -->
@@ -29,6 +30,10 @@
             }
         </div>
 
+            <input type="hidden" name="productId" value="@Model[0].ProductId" />
+            <input type="hidden" name="productName" value="@Model[0].ProductName" />
+            <input type="hidden" name="productPrice" value="@Model[0].Price" />
+            <input type="hidden" name="Image" value="/images/ProductImage/@Model[0].Image" />
 
         <!-- Right Column -->
         <div class="right-column">
@@ -68,13 +73,16 @@
                 <!-- Cable Configuration -->
                 <div class="cable-config">
                     <span>Size</span>
-
-                    <div class="cable-choose">
-                        @for(int i=0; i<Model.Count; i++)
+                    @for(int i=0; i<Model.Count; i++)
                         {
+                    <div class="cable-choose">
+                        
                             <button>@Model[i].Size.SizeNumber</button>
-                        }
+                        
                     </div>
+
+                    <span>Quantity : @Model[i].Quantity</span>
+                        }
 
                     <a href="#">How to configurate your headphones</a>
                 </div>
@@ -82,8 +90,8 @@
 
             <!-- Product Pricing -->
             <div class="product-price">
-                <span>148$</span>
-                <a href="#" class="cart-btn">Add to cart</a>
+                <span>@Model[0].Price$</span>
+                    <button type="button" class="btn btn-danger addToCartBtn" data-toggle="modal" data-target="#exampleModal">Add to cart</button>
             </div>
         </div>
     </main>
@@ -91,5 +99,56 @@
     <!-- Scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js" charset="utf-8"></script>
     <script src="~/assets/js/script.js" charset="utf-8"></script>
+
 </body>
 </html>
+
+    @foreach (var item in Model)
+    {
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="margin-top:200px">
+        <!-- Modal content -->
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <input type="number" min="1" class="form-control" name="Quantity" required />
+                        <span asp-validation-for="@item.Quantity" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <select asp-for="@item.ColorDetailID" class="form-control" required>
+                            <option value="@item.ColorDetailID">@item.ColorDetail.Color</option>
+                        </select>
+                        <span asp-validation-for="@item.ColorDetailID" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <select asp-for="@item.SizeID" class="form-control" required>
+                            <option value="@item.SizeID">@item.Size.SizeNumber</option>
+                        </select>
+                        <span asp-validation-for="@item.SizeID" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <form action="/add-to-cart" method="post">
+                        <!-- Other form fields -->
+                        <input type="hidden" name="color.ColorDetailID" value="@item.ColorDetailID" />
+                        <input type="hidden" name="size.SizeID" value="@item.SizeID" />
+                        <button type="submit" class="btn btn-danger">Save changes</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    }
+
+
+
+</form>
+
+

@@ -157,6 +157,7 @@
                             <div class="row grid">
                                 @foreach (var product in Model)
                                 {
+                                    <form method="POST" action="/add-to-cart">
                                     <div class="col-lg-4 col-md-4 all des">
                                         <div class="product-item">
                                             @if (!string.IsNullOrEmpty(product.Image))
@@ -179,6 +180,7 @@
                                             </div>
                                         </div>
                                     </div>
+                                    </form>
                                 }
 
                             </div>

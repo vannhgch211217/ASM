@@ -37,8 +37,8 @@
                                     <div class="col-lg-5 col-md-6 mb-4 mb-lg-0">
                                         <!-- Data -->
                                         <p><strong>@item.ProductName</strong></p>
-                                        <p>Color: blue</p>
-                                        <p>Size: M</p>
+                                        <p>Color: @item.ColorDetailID</p>
+                                        <p>Size: @item.SizeID</p>
                                         <form asp-controller="Cart" asp-action="RemoveFromCart" method="post">
                                             <input type="hidden" name="productId" value="@item.ProductId" />
                                             <button type="submit" class="btn btn-danger btn-sm me-1 mb-2" data-mdb-toggle="tooltip"
@@ -144,3 +144,4 @@
         </div>
     </div>
 </section>
+
