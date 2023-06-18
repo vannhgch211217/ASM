@@ -1,9 +1,13 @@
 using ASM.Data;
+using ASM.Migrations;
 using ASM.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 namespace ASM.Areas.Suppiler.Controllers
 {
@@ -19,10 +23,23 @@ namespace ASM.Areas.Suppiler.Controllers
 
         // GET: Suppiler/Product
         [HttpGet("/Suppiler/Product")]
-        public async Task<IActionResult> Index()
+        public IActionResult Index(String groupID)
         {
-            var aSMContext = _context.Product.Include(p => p.Category).Include(p => p.ColorDetail).Include(p => p.Size).Include(p => p.User);
-            return View(await aSMContext.ToListAsync());
+            List<Product> products;
+
+            if (groupID == null)
+            {
+                products = _context.Product
+                    .GroupBy(p => p.GroupId)
+                    .Select(g => g.First())
+                    .ToList();
+            }
+            else
+            {
+                products = _context.Product.Where(p => p.GroupId == groupID).ToList();
+            }
+
+            return View(products);
         }
 
         // GET: Suppiler/Product/Details/5
@@ -50,51 +67,120 @@ namespace ASM.Areas.Suppiler.Controllers
 
         // GET: Suppiler/Product/Create
         [HttpGet("/Suppiler/Product/Create")]
-        public IActionResult CreateProduct()
+        public IActionResult CreateProduct(int? similarTo)
         {
             ViewData["CategoryID"] = new SelectList(_context.Category, "CategoryID", "Name");
             ViewData["ColorDetailID"] = new SelectList(_context.ColorDetail, "ColorDetailID", "Color");
             ViewData["SizeID"] = new SelectList(_context.Size, "SizeID", "SizeNumber");
             ViewData["UserID"] = new SelectList(_context.User, "UserID", "UserID");
-            return View("Create");
+
+            if (similarTo == null)
+            {
+                // Case: similarTo is null
+                return View("Create");
+            }
+            else
+            {
+                // Case: similarTo is not null
+                Product existingProduct = _context.Product.FirstOrDefault(p => p.ProductId == similarTo);
+                if (existingProduct == null)
+                {
+                    Console.WriteLine("Product not found.");
+                    // Handle the scenario where existingProduct is null
+                    // You can choose to display an error message or redirect to an error page, etc.
+                    return View("Error");
+                }
+                return View("Create", existingProduct);
+            }
         }
+
 
         // POST: Suppiler/Product/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost("/Suppiler/Product/Create")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProductId,UserID,CategoryID,SizeID,ColorDetailID,ProductName,Price,Quantity,Description")] Product product, List<IFormFile> imageFiles)
+        public async Task<IActionResult> Create([Bind("ProductId,UserID,CategoryID,SizeID,ColorDetailID,ProductName,Price,Quantity,Description")] Product product, IFormFile imageFile,[FromQuery] int? SimilarTo)
         {
+            Debug.WriteLine(imageFile.FileName);
+
+            var imgPath = Path.Combine("wwwroot/images/ProductImage", imageFile.FileName);
+
+            using (var stream = System.IO.File.Create(imgPath))
+            {
+                await imageFile.CopyToAsync(stream);
+                product.Image = imageFile.FileName;
+            }
+
+            Debug.WriteLine(SimilarTo);
+
             try
             {
-                // Create a list to store the image names
-                var imageNames = new List<string>();
-
-                foreach (var imageFile in imageFiles)
+                if (SimilarTo == null)
                 {
-                    var imgPath = Path.Combine("wwwroot/images/ProductImage", imageFile.FileName);
+                    // Generate a unique GroupId for the product variants
+                    var groupId = Guid.NewGuid().ToString();
+                    /*product.GroupId = groupId;*/
 
-                    using (var stream = System.IO.File.Create(imgPath))
+
+
+                    // Create variants for each color/size combination
+                    Product variant = new Product
                     {
-                        await imageFile.CopyToAsync(stream);
-                        imageNames.Add(imageFile.FileName); // Add the image name to the list
-                    }
+                        UserID = product.UserID,
+                        CategoryID = product.CategoryID,
+                        ProductName = product.ProductName,
+                        Price = product.Price,
+                        Quantity = product.Quantity,
+                        Description = product.Description,
+                        Image = product.Image,
+                        GroupId = groupId,
+                        ColorDetailID = product.ColorDetailID,
+                        SizeID = product.SizeID
+                    };
+
+                    // Add the variant to the context
+                    _context.Add(variant);
+
+
+                    // Save all changes to the database
+                    await _context.SaveChangesAsync();
+
+                }
+                else
+                {
+                    Product existingProduct = _context.Product.FirstOrDefault(p => p.ProductId == SimilarTo);
+                    Product variant = new Product
+                    {
+                        UserID = product.UserID,
+                        CategoryID = product.CategoryID,
+                        ProductName = product.ProductName,
+                        Price = product.Price,
+                        Quantity = product.Quantity,
+                        Description = product.Description,
+                        Image = product.Image,
+                        GroupId = existingProduct.GroupId,
+                        ColorDetailID = product.ColorDetailID,
+                        SizeID = product.SizeID
+                    };
+
+                    // Add the variant to the context
+                    _context.Add(variant);
+
+
+                    // Save all changes to the database
+                    await _context.SaveChangesAsync();
+
+
                 }
 
-                // Join the image names with a delimiter and assign it to the product's Images property
-                product.Image = string.Join(",", imageNames);
-
-                _context.Add(product);
-                await _context.SaveChangesAsync();
-
-                return RedirectToAction(nameof(Index));
+                return Redirect("/Suppiler/Product");
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
+                //Console.WriteLine(ex);
 
-                return View("Error", ex.Message);
+                return View();
             }
         }
 
@@ -146,7 +232,7 @@ namespace ASM.Areas.Suppiler.Controllers
         }
 
 
-        // POST: Suppiler/Product/Edit/5
+        //POST: Suppiler/Product/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost("Suppiler/Product/Edit/{id}")]
@@ -160,6 +246,7 @@ namespace ASM.Areas.Suppiler.Controllers
 
             try
             {
+                
                 // Handle the uploaded images
                 if (imageFiles != null && imageFiles.Count > 0)
                 {
@@ -178,6 +265,10 @@ namespace ASM.Areas.Suppiler.Controllers
                     }
                     product.Image = string.Join(",", imageNames);
                 }
+
+                var productndb = await _context.Product.AsNoTracking().FirstOrDefaultAsync(p => p.ProductId == id);
+                product.Image = productndb.Image;
+                product.GroupId = productndb.GroupId;
 
                 _context.Update(product);
                 await _context.SaveChangesAsync();
@@ -201,6 +292,8 @@ namespace ASM.Areas.Suppiler.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+
 
         /*public async Task<IActionResult> Edit(int id, [Bind("ProductId,UserID,CategoryID,SizeID,ColorDetailID,ProductName,Price,Quantity,Description,Image")] Models.Product product)
         {

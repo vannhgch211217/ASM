@@ -30,34 +30,41 @@ namespace ASM.Controllers
                 products = products.Where(p => p.ProductName.Contains(keyword) || p.Category.Name.Contains(keyword));
             }
 
-            products = products.Include(p => p.Category);
+            var distinctProducts = products.GroupBy(p => p.GroupId)
+                                   .Select(g => g.First());
 
             ViewData["CategoryID"] = new SelectList(_context.Category, "CategoryID", "Name");
 
-            return View(await products.ToListAsync());
+            return View(await distinctProducts.ToListAsync());
         }
 
         // GET: Products/Details/5
         [HttpGet("Products/Details/{id}")]
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int? id, string groupId)
         {
+            Console.WriteLine(groupId);
             if (id == null || _context.Product == null)
             {
                 return NotFound();
             }
 
-            var product = await _context.Product
-                .Include(p => p.Category)
-                .Include(p => p.ColorDetail)
-                .Include(p => p.Size)
-                .Include(p => p.User)
-                .FirstOrDefaultAsync(m => m.ProductId == id);
-            if (product == null)
+            List<Product> products = await _context.Product
+            .Where(p => p.GroupId == groupId)
+            .Include(p => p.ColorDetail)
+            .Include(p => p.Category)
+            .Include(p => p.Size)
+            .ToListAsync();
+
+            for(int i = 0; i< products.Count; i++)
+            {
+                Console.WriteLine(products[i].ColorDetail.Color);
+            }
+            if (products == null)
             {
                 return NotFound();
             }
 
-            return View(product);
+            return View(products);
         }
     }
 }

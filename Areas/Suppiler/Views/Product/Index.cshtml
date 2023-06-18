@@ -19,18 +19,6 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.User)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Category)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Size)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ColorDetail)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.ProductName)
             </th>
             <th>
@@ -52,18 +40,6 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.User.UserID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Category.CategoryID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Size.SizeID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ColorDetail.ColorDetailID)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.ProductName)
             </td>
             <td>
@@ -75,17 +51,16 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
-            @foreach (var imageName in item.Image.Split(','))
-            {
-                <td>
-                    <img width="60px" src="/images/ProductImage/@imageName">
-                </td>
-            }
 
+                <td>
+                    <img width="60px" src="/images/ProductImage/@item.Image">
+                </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.ProductId">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.ProductId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ProductId">Delete</a>
+                <a asp-action="Delete" asp-route-id="@item.ProductId">Delete</a> |
+                <a href="/Suppiler/Product/Create?similarTo=@item.ProductId">Add similar</a>|
+                <a href="/Suppiler/Product?groupID=@item.GroupId">View similar</a>
             </td>
         </tr>
 }

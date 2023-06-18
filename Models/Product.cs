@@ -34,6 +34,8 @@ namespace ASM.Models
         public int Quantity { get; set; }
         public String Description { get; set; }
         public String Image { get; set; }
+
+        public String GroupId { get; set; }
     }
 }
 

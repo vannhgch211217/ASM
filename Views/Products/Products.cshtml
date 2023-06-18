@@ -122,7 +122,7 @@
     </header>
 
 
-    <main role="main">
+    <main role="main" style="margin-top:80px">
         <!-- Page Content -->
         <div class="page-heading products-heading header-text">
             <div class="container">
@@ -162,10 +162,10 @@
                                             @if (!string.IsNullOrEmpty(product.Image))
                                             {
                                                 var images = product.Image.Split(',');
-                                                <a href="/Products/Details/@product.ProductId"><img src="/images/ProductImage/@images[0]" alt=""></a>
+                                                <a href="/Products/Details/@product.ProductId?groupId=@product.GroupId" value="@product.GroupId"><img src="/images/ProductImage/@images[0]" alt=""></a>
                                             }
                                             <div class="down-content">
-                                                <a href="/Products/Details/@product.ProductId"><h4>@product.ProductName</h4></a>
+                                                <a href="/Products/Details/@product.ProductId?groupId=@product.GroupId"><h4>@product.ProductName</h4></a>
                                                 <h6>@product.Price</h6>
                                                 <p>@product.Description</p>
                                                 <ul class="stars">

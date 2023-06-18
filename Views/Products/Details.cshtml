@@ -1,4 +1,4 @@
-﻿@model ASM.Models.Product
+﻿@model List<ASM.Models.Product>
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
     ViewData["Title"] = "Details";
@@ -22,12 +22,10 @@
 
         <!-- Left Column / Headphones Image -->
         <div class="left-column">
-            @if (!string.IsNullOrEmpty(Model.Image))
+            <!-- Product Description -->
+            @for (int i = 0; i < Model.Count; i++)
             {
-                var images = Model.Image.Split(',');
-                <img data-image="black" src="/images/ProductImage/@images[0]" alt="">
-                <img data-image="blue" src="/images/ProductImage/@images[1]" alt="">
-                <img data-image="red" class="active" src="/images/ProductImage/@images[2]" alt="">
+                <img data-image="@Model[i].ColorDetail.Color.ToLower()" src="/images/ProductImage/@Model[i].Image" alt="">
             }
         </div>
 
@@ -37,10 +35,11 @@
 
             <!-- Product Description -->
             <div class="product-description">
-                <span>@Html.DisplayFor(model => model.Category.Name)</span>
-                <h1>@Html.DisplayFor(model => model.ProductName)</h1>
-                <p>@Html.DisplayFor(model => model.Description)</p>
+                <span>@Model[0].Category.Name</span>
+                <h1>@Model[0].ProductName</h1>
+                <p>@Model[0].Description</p>
             </div>
+            
 
             <!-- Product Configuration -->
             <div class="product-configuration">
@@ -68,12 +67,13 @@
 
                 <!-- Cable Configuration -->
                 <div class="cable-config">
-                    <span>Cable configuration</span>
+                    <span>Size</span>
 
                     <div class="cable-choose">
-                        <button>Straight</button>
-                        <button>Coiled</button>
-                        <button>Long-coiled</button>
+                        @for(int i=0; i<Model.Count; i++)
+                        {
+                            <button>@Model[i].Size.SizeNumber</button>
+                        }
                     </div>
 
                     <a href="#">How to configurate your headphones</a>

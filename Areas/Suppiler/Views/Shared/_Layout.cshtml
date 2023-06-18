@@ -1,4 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Http
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
     var session = Context.Request.HttpContext.Session;
 }
@@ -60,7 +61,7 @@
                             </a>
                         </li>*@
                         <li class="nav-item">
-                            <a class="nav-link" href="Product">My Products</a>
+                            <a class="nav-link" asp-action="Index">My Products</a>
                         </li>
                         @*<li class="nav-item">
                             <a class="nav-link" href="about.html">About Us</a>
