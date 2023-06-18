@@ -25,9 +25,8 @@ namespace ASM.Controllers
         public IActionResult Index()
         {
             string userEmail = HttpContext.Session.GetString("UserEmail");
-            var user = _context.User.FirstOrDefault(u => u.Email == userEmail);
 
-            if (user == null)
+            if (userEmail == null)
             {
                 return Redirect("/login");
             }
@@ -102,9 +101,7 @@ namespace ASM.Controllers
         public IActionResult Checkout()
         {
             string userEmail = HttpContext.Session.GetString("UserEmail");
-            var user = _context.User.FirstOrDefault(u => u.Email == userEmail);
-
-            if (user == null)
+            if (userEmail == null)
             {
                 return Redirect("/login");
             }
@@ -117,22 +114,14 @@ namespace ASM.Controllers
         {
             string userEmail = HttpContext.Session.GetString("UserEmail");
             User userInDb = _context.User.FirstOrDefault(u => u.Email == userEmail);
-
             if (userInDb != null)
             {
-                // Update the user's information
                 userInDb.PhoneNumber = phoneNumber;
                 userInDb.Address = address;
-
-                // Save the changes to the database
                 _context.SaveChanges();
-
-                // Update the user's information in the session
                 HttpContext.Session.SetString("UserPhone", phoneNumber);
                 HttpContext.Session.SetString("UserAddress", address);
             }
-
-            // Redirect to a suitable page (e.g., profile page)
             return Redirect("/checkout");
         }
 
@@ -141,14 +130,10 @@ namespace ASM.Controllers
         {
             string userEmail = HttpContext.Session.GetString("UserEmail");
             User userInDb = _context.User.FirstOrDefault(u => u.Email == userEmail);
-
-            // Retrieve the cart from the session or database
             List<Product> cart = HttpContext.Session.getJson<List<Product>>(userEmail + "Cart");
             float grandTotal = HttpContext.Session.getJson<float>(userEmail + "GrandTotal");
-
             if (userInDb != null && cart != null)
             {
-                // Create a new order
                 Order order = new Order
                 {
                     UserID = userInDb.UserID,
@@ -157,11 +142,9 @@ namespace ASM.Controllers
                     TotalPrice = grandTotal
                 };
 
-                // Save the order to the database
                 _context.Order.Add(order);
                 _context.SaveChanges();
 
-                // Create order details for each product in the cart
                 foreach (Product product in cart)
                 {
                     OrderDetail orderDetail = new OrderDetail
@@ -171,38 +154,30 @@ namespace ASM.Controllers
                         Quantity = product.Quantity,
                         UnitPrice = product.Price
                     };
-
-                    // Save the order detail to the database
                     _context.OrderDetail.Add(orderDetail);
                 }
 
-                // Clear the cart
                 cart.Clear();
                 HttpContext.Session.setJson(userEmail + "Cart", cart);
                 HttpContext.Session.Remove(userEmail + "GrandTotal");
-
-                // Save the changes to the database
                 _context.SaveChanges();
             }
-
-            // Redirect to a suitable page (e.g., order confirmation page)
             return Redirect("/orderInfo");
         }
 
         [HttpGet("/orderInfo")]
         public IActionResult ConfirmOrder(int orderId)
         {
-
             try
             {
                 string userEmail = HttpContext.Session.GetString("UserEmail");
-                var user = _context.User.FirstOrDefault(u => u.Email == userEmail);
-
-                if (user == null)
+                
+                if (userEmail == null)
                 {
                     return Redirect("/login");
                 }
 
+                var user = _context.User.FirstOrDefault(u => u.Email == userEmail);
                 List<Order> orders = _context.Order
                     .Where(o => o.UserID == user.UserID)
                     .Include(o => o.OrderDetails)
@@ -222,7 +197,7 @@ namespace ASM.Controllers
             {
                 string errorMessage = "An error occurred: " + ex.Message;
                 ViewData["ErrorMessage"] = errorMessage;
-                return View("Index"); // You may want to choose a more appropriate error view
+                return View("Index"); 
             }
         }
     }

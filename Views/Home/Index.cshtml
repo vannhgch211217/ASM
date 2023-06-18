@@ -49,9 +49,10 @@
                                     <a href="#"><h4>@Html.DisplayFor(model => item.ProductName)</h4></a>
                                     <h6>$@Html.DisplayFor(model => item.Price)</h6>
                                     <p>@Html.DisplayFor(model => item.Description)</p>
-                                <input type="hidden" name="productId" value="@item.ProductId" />
-                                <input type="hidden" name="productName" value="@item.ProductName" />
-                                <input type="hidden" name="productPrice" value="@item.Price" />
+                                    <input type="hidden" name="productId" value="@item.ProductId" />
+                                    <input type="hidden" name="productName" value="@item.ProductName" />
+                                    <input type="hidden" name="productPrice" value="@item.Price" />
+                                    <input type="hidden" name="Image" value="/images/ProductImage/@item.Image" />
                                     <button type="submit" class="btn btn-danger text-center">Add to cart</button>
                                 </div>
                             </div>

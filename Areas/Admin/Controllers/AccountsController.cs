@@ -23,6 +23,13 @@ namespace ASM.Areas.Admin.Controllers
         [HttpGet("/Admin/Accounts")]
         public async Task<IActionResult> Index(string searchString)
         {
+            string userEmail = HttpContext.Session.GetString("UserEmail");
+
+            if (userEmail == null)
+            {
+                return Redirect("/login");
+            }
+
             ViewBag.Count = _context.User.Count();
             ViewBag.CountUser = _context.User.Count(a => a.Role == "User");
             ViewBag.CountSupplier = _context.User.Count(a => a.Role == "Supplier");
@@ -111,7 +118,7 @@ namespace ASM.Areas.Admin.Controllers
         }
 
         // POST: Admin/Accounts/Delete/5
-        [HttpPost("Admin/Delete/{id}"), ActionName("Delete")]
+        [HttpPost("Admin/Accounts/Delete/{id}"), ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {

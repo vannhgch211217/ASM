@@ -1,4 +1,8 @@
 ﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@using Microsoft.AspNetCore.Http
+@{
+    var session = Context.Request.HttpContext.Session;
+}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -39,6 +43,28 @@
                                 </div>
                             </form>
                         </li>
+                        @if (string.IsNullOrEmpty(@session.GetString("Username")))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link ml-4" href="/login">Login</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link text-black">
+                                    Hello @session.GetString("Username")
+                                </a>
+                                <div class="dropdown-menu text-center" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="/profile">Profile</a>
+                                    <a class="dropdown-item" href="/orderInfo">Order</a>
+                                    <a class="dropdown-item" href="/logout">Logout</a>
+                                </div>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/logout">Logout</a>
+                                </li>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>

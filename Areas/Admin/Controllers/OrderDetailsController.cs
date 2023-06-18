@@ -18,6 +18,13 @@ namespace ASM.Areas.Admin.Controllers
         [HttpGet("/Admin/OrderDetails")]
         public async Task<IActionResult> Index()
         {
+            string userEmail = HttpContext.Session.GetString("UserEmail");
+
+            if (userEmail == null)
+            {
+                return Redirect("/login");
+            }
+
             var orderDetails = _context.OrderDetail.Include(od => od.Product);
             var groupedOds = orderDetails.GroupBy(a => a.Product.UserID);
 

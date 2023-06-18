@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using ASM.Data;
 using ASM.Models;
 using System.Drawing;
+using System.Security.Policy;
 
 namespace ASM.Areas.Admin.Controllers
 {
@@ -25,6 +26,13 @@ namespace ASM.Areas.Admin.Controllers
         [HttpGet("/Admin/Sizes")]
         public async Task<IActionResult> Index(string searchString)
         {
+            string userEmail = HttpContext.Session.GetString("UserEmail");
+
+            if (userEmail == null)
+            {
+                return Redirect("/login");
+            }
+
             var sz = from m in _context.Size select m;
             if (!String.IsNullOrEmpty(searchString))
             {
@@ -134,16 +142,15 @@ namespace ASM.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Size == null)
+            var products = _context.Product.Where(p => p.SizeID == id).ToList();
+            var size = _context.Size.Find(id);
+
+            // Remove the association between products and the size
+            foreach (var product in products)
             {
-                return Problem("Entity set 'ASMContext.Size'  is null.");
+                product.SizeID = null; // Remove the association with the size
             }
-            var size = await _context.Size.FindAsync(id);
-            if (size != null)
-            {
-                _context.Size.Remove(size);
-            }
-            
+            _context.Size.Remove(size);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
