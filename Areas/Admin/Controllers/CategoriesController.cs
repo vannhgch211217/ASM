@@ -24,6 +24,13 @@ namespace ASM.Areas.Admin.Controllers
         [HttpGet("/Admin/Categories")]
         public async Task<IActionResult> Index(string searchString)
         {
+            string userEmail = HttpContext.Session.GetString("UserEmail");
+
+            if (userEmail == null)
+            {
+                return Redirect("/login");
+            }
+
             var cat = from m in _context.Category select m;
             if (!String.IsNullOrEmpty(searchString))
             {

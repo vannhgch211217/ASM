@@ -26,6 +26,13 @@ namespace ASM.Areas.Admin.Controllers
         [HttpGet("/Admin/Sizes")]
         public async Task<IActionResult> Index(string searchString)
         {
+            string userEmail = HttpContext.Session.GetString("UserEmail");
+
+            if (userEmail == null)
+            {
+                return Redirect("/login");
+            }
+
             var sz = from m in _context.Size select m;
             if (!String.IsNullOrEmpty(searchString))
             {

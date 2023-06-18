@@ -24,6 +24,13 @@ namespace ASM.Areas.Admin.Controllers
         [HttpGet("/Admin/ColorDetails")]
         public async Task<IActionResult> Index(string searchString)
         {
+            string userEmail = HttpContext.Session.GetString("UserEmail");
+
+            if (userEmail == null)
+            {
+                return Redirect("/login");
+            }
+
             var color = from m in _context.ColorDetail select m;
             if (!String.IsNullOrEmpty(searchString))
             {

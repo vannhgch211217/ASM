@@ -22,7 +22,6 @@ namespace ASM.Controllers
         [HttpGet("/login")]
         public IActionResult Index()
         {
-            Console.WriteLine("Hello");
             return View("Index");
         }
 

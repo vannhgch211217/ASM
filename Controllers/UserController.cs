@@ -30,37 +30,7 @@ namespace ASM.Controllers
               return _context.User != null ? 
                           View(await _context.User.ToListAsync()) :
                           Problem("Entity set 'ASMContext.User'  is null.");
-        }
-
-        // GET: User/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null || _context.User == null)
-            {
-                return NotFound();
-            }
-
-            var user = await _context.User
-                .FirstOrDefaultAsync(m => m.UserID == id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            return View(user);
-        }
-
-        private bool UserExists(int id)
-        {
-          return (_context.User?.Any(e => e.UserID == id)).GetValueOrDefault();
-        }
-
-        public IActionResult Error()
-        {
-            string alertMessage = TempData["AlertMessage"] as string;
-            ViewBag.AlertMessage = alertMessage;
-            return View();
-        }
+        }        
 
         [HttpGet("/profile")]
         public IActionResult profile()
@@ -79,11 +49,11 @@ namespace ASM.Controllers
         public async Task<IActionResult> updateProfile(User updatedUser)
         {
             String userEmail = HttpContext.Session.GetString(SessionKeyEmail);
-            var user = await _context.User.FirstOrDefaultAsync(u => u.Email == userEmail);
-            if (user == null)
+            if (userEmail == null)
             {
                 return NotFound();
             }
+            var user = await _context.User.FirstOrDefaultAsync(u => u.Email == userEmail);
             user.Name = updatedUser.Name;
             user.Email = updatedUser.Email;
             user.Address = updatedUser.Address;
