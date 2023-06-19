@@ -144,7 +144,7 @@
                     <div class="col-md-12">
                         <div class="filters">
                             <ul>
-                                <li class="active" data-filter="*">All Products</li>
+                                <li><a asp-action="Index">All Products</a></li>
                                 @foreach (var category in ViewBag.CategoryID as SelectList)
                                 {
                                     <li><a href="@Url.Action("Products", new { keyword = category.Text})">@category.Text</a></li>
@@ -166,7 +166,7 @@
                                             }
                                             <div class="down-content">
                                                 <a href="/Products/Details/@product.ProductId?groupId=@product.GroupId"><h4>@product.ProductName</h4></a>
-                                                <h6>@product.Price</h6>
+                                                <h6>@product.Price$</h6>
                                                 <p>@product.Description</p>
                                                 <ul class="stars">
                                                     <li><i class="fa fa-star"></i></li>

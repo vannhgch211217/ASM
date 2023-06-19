@@ -8,7 +8,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
     <!-- CSS -->
@@ -23,9 +24,19 @@
         <!-- Left Column / Headphones Image -->
         <div class="left-column">
             <!-- Product Description -->
-            @for (int i = 0; i < Model.Count; i++)
+            @{
+                var uniqueGroupIds = Model.Select(p => p.GroupId).Distinct();
+            }
+
+            @foreach (var groupId in uniqueGroupIds)
             {
-                <img data-image="@Model[i].ColorDetail.Color.ToLower()" src="/images/ProductImage/@Model[i].Image" alt="">
+                var products = Model.Where(p => p.GroupId == groupId);
+
+                foreach (var product in products)
+                {
+                    <img data-image="@product.ColorDetail.Color.ToLower()" src="/images/ProductImage/@product.Image"
+                         class="active" alt="">
+                }
             }
         </div>
 
@@ -49,7 +60,17 @@
                     <span>Color</span>
 
                     <div class="color-choose">
-                        <div>
+                        @{
+                            var uniqueColors = Model.Select(m => m.ColorDetail.Color.ToLower()).Distinct();
+                        }
+                        @foreach(var product in uniqueColors)
+                        {
+                            <div>
+                                <input data-image="@product" type="radio" id="@product" name="color" value="@product" checked>
+                                <label for="@product"><span></span></label>
+                            </div>
+                        }
+                        @*<div>
                             <input data-image="red" type="radio" id="red" name="color" value="red" checked>
                             <label for="red"><span></span></label>
                         </div>
@@ -60,7 +81,7 @@
                         <div>
                             <input data-image="black" type="radio" id="black" name="color" value="black">
                             <label for="black"><span></span></label>
-                        </div>
+                        </div>*@
                     </div>
 
                 </div>
@@ -70,19 +91,22 @@
                     <span>Size</span>
 
                     <div class="cable-choose">
-                        @for(int i=0; i<Model.Count; i++)
+                        @{
+                            var uniqueSizes = Model.Select(m => m.Size.SizeNumber).Distinct();
+                        }
+                        @foreach (var size in uniqueSizes)
                         {
-                            <button>@Model[i].Size.SizeNumber</button>
+                            <button>@size</button>
                         }
                     </div>
 
-                    <a href="#">How to configurate your headphones</a>
+                    <a href="#">How to dress up like a model</a>
                 </div>
             </div>
 
             <!-- Product Pricing -->
             <div class="product-price">
-                <span>148$</span>
+                <span>@Model[0].Price$</span>
                 <a href="#" class="cart-btn">Add to cart</a>
             </div>
         </div>

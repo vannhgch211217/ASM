@@ -58,7 +58,7 @@
             <td>
                 <a asp-action="Edit" asp-route-id="@item.ProductId">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.ProductId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ProductId">Delete</a> |
+                <a href="@Url.Action("Delete", new { id = item.ProductId, groupId = item.GroupId })">Delete</a> |
                 <a href="/Suppiler/Product/Create?similarTo=@item.ProductId">Add similar</a>|
                 <a href="/Suppiler/Product?groupID=@item.GroupId">View similar</a>
             </td>
