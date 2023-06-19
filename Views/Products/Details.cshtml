@@ -4,7 +4,7 @@
     ViewData["Title"] = "Details";
 
 }
-
+<form method="POST" action="/add-to-cart">
 <!DOCTYPE html>
 <html>
 <head>
@@ -19,6 +19,9 @@
 </head>
 
 <body>
+    
+        
+
     <main class="container">
 
         <!-- Left Column / Headphones Image -->
@@ -40,6 +43,11 @@
             }
         </div>
 
+            <input type="hidden" name="productId" value="@Model[0].ProductId" />
+            <input type="hidden" name="productName" value="@Model[0].ProductName" />
+            <input type="hidden" name="productPrice" value="@Model[0].Price" />
+            <input type="hidden" name="Image" value="/images/ProductImage/@Model[0].Image" />
+            <input type="hidden" name="groupId" value="@Model[0].GroupId" />
 
         <!-- Right Column -->
         <div class="right-column">
@@ -51,7 +59,6 @@
                 <p>@Model[0].Description</p>
             </div>
             
-
             <!-- Product Configuration -->
             <div class="product-configuration">
 
@@ -97,7 +104,7 @@
                         @foreach (var size in uniqueSizes)
                         {
                             <button>@size</button>
-                        }
+                        
                     </div>
 
                     <a href="#">How to dress up like a model</a>
@@ -115,5 +122,55 @@
     <!-- Scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js" charset="utf-8"></script>
     <script src="~/assets/js/script.js" charset="utf-8"></script>
+
 </body>
 </html>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="margin-top:200px">
+        <!-- Modal content -->
+    <form action="/add-to-cart" method="post">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <input type="number" min="1" class="form-control" name="Quantity" required />
+
+                    </div>
+                    <div class="mb-3">
+                        <select class="form-control form-control" name="colorID">
+                                @foreach (var itemColor in Model)
+                                {
+                                <option value="@itemColor.ColorDetailID">@itemColor.ColorDetail.Color</option>
+                                }
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <select class="form-control" name="sizeID" required>
+                                @foreach (var itemSize in Model)
+                                {
+                                <option value="@itemSize.SizeID">@itemSize.Size.SizeNumber</option>
+                                }
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-danger">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </form>
+    </div>
+
+</form>
+
+
+
+
+

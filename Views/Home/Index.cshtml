@@ -42,21 +42,27 @@
             @foreach (var item in Model)
             {
                     <div class="col-md-4">
-                    <form method="POST" action="/add-to-cart">
+
                             <div class="product-item">
-                                <a href="#"><img src="/images/ProductImage/@item.Image" alt=""></a>
+                            <a href="/Products/Details/@item.ProductId?groupId=@item.GroupId"><img src="/images/ProductImage/@item.Image" alt=""></a>
                                 <div class="down-content">
-                                    <a href="#"><h4>@Html.DisplayFor(model => item.ProductName)</h4></a>
+                                <a href="/Products/Details/@item.ProductId?groupId=@item.GroupId"><h4>@Html.DisplayFor(model => item.ProductName)</h4></a>
                                     <h6>$@Html.DisplayFor(model => item.Price)</h6>
                                     <p>@Html.DisplayFor(model => item.Description)</p>
                                     <input type="hidden" name="productId" value="@item.ProductId" />
                                     <input type="hidden" name="productName" value="@item.ProductName" />
                                     <input type="hidden" name="productPrice" value="@item.Price" />
                                     <input type="hidden" name="Image" value="/images/ProductImage/@item.Image" />
-                                    <button type="submit" class="btn btn-danger text-center">Add to cart</button>
+                                <ul class="stars">
+                                    <li><i class="fa fa-star"></i></li>
+                                    <li><i class="fa fa-star"></i></li>
+                                    <li><i class="fa fa-star"></i></li>
+                                    <li><i class="fa fa-star"></i></li>
+                                    <li><i class="fa fa-star"></i></li>
+                                </ul>
+                                <span>Reviews (21)</span>
                                 </div>
                             </div>
-                        </form>
                     </div>
             }
             

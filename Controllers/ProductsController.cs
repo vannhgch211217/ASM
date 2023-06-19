@@ -55,10 +55,7 @@ namespace ASM.Controllers
             .Include(p => p.Size)
             .ToListAsync();
 
-            for(int i = 0; i< products.Count; i++)
-            {
-                Console.WriteLine(products[i].ColorDetail.Color);
-            }
+            
             if (products == null)
             {
                 return NotFound();

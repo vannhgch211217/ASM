@@ -37,10 +37,12 @@
                                     <div class="col-lg-5 col-md-6 mb-4 mb-lg-0">
                                         <!-- Data -->
                                         <p><strong>@item.ProductName</strong></p>
-                                        <p>Color: blue</p>
-                                        <p>Size: M</p>
+                                        <p>Color: @item.ColorDetailID</p>
+                                        <p>Size: @item.SizeID</p>
                                         <form asp-controller="Cart" asp-action="RemoveFromCart" method="post">
                                             <input type="hidden" name="productId" value="@item.ProductId" />
+                                            <input type="hidden" name="groupID" value="@item.GroupId" />
+                                            <input type="hidden" name="sizeId" value="@item.SizeID" />
                                             <button type="submit" class="btn btn-danger btn-sm me-1 mb-2" data-mdb-toggle="tooltip"
                                                     title="Remove item">
                                                 <i class="fas fa-trash"></i>
@@ -54,6 +56,8 @@
                                         <div class="d-flex" style="max-width: 300px">
                                             <form asp-controller="Cart" asp-action="DecreaseQuantity" method="post">
                                                 <input type="hidden" name="productId" value="@item.ProductId" />
+                                                <input type="hidden" name="groupID" value="@item.GroupId" />
+                                                <input type="hidden" name="sizeId" value="@item.SizeID" />
                                                 <button class="btn btn-primary mr-2 pr-2 pl-2"
                                                         type="submit" style="height:35px">
                                                     <i class="fas fa-minus"></i>
@@ -66,6 +70,8 @@
 
                                             <form asp-controller="Cart" asp-action="IncreaseQuantity" method="post">
                                                 <input type="hidden" name="productId" value="@item.ProductId" />
+                                                <input type="hidden" name="groupID" value="@item.GroupId" />
+                                                <input type="hidden" name="sizeId" value="@item.SizeID" />
                                                 <button class="btn btn-primary ml-2 pr-2 pl-2"
                                                         type="submit" style="height:35px">
 
@@ -144,3 +150,4 @@
         </div>
     </div>
 </section>
+

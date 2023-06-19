@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ASM.Data;
+using ASM.Migrations;
 using ASM.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -38,16 +39,21 @@ namespace ASM.Controllers
         }
 
         [HttpPost("/Cart/IncreaseQuantity")]
-        public IActionResult IncreaseQuantity(int productId)
+        public IActionResult IncreaseQuantity(int productId, string groupID, int sizeId)
         {
+            Console.WriteLine(groupID);
             string userEmail = HttpContext.Session.GetString("UserEmail");
+            var product = _context.Product.FirstOrDefault(x => x.GroupId == groupID && x.SizeID == sizeId);
             List<Product> cart = HttpContext.Session.getJson<List<Product>>(userEmail + "Cart") ?? new List<Product>();
 
             Product existingProduct = cart.FirstOrDefault(p => p.ProductId == productId);
             if (existingProduct != null)
             {
                 existingProduct.Quantity++;
+                product.Quantity--;
+                _context.SaveChanges();
             }
+
 
             HttpContext.Session.setJson(userEmail + "Cart", cart);
 
@@ -58,15 +64,18 @@ namespace ASM.Controllers
         }
 
         [HttpPost("/Cart/DecreaseQuantity")]
-        public IActionResult DecreaseQuantity(int productId)
+        public IActionResult DecreaseQuantity(int productId, string groupID, int sizeId)
         {
             string userEmail = HttpContext.Session.GetString("UserEmail");
             List<Product> cart = HttpContext.Session.getJson<List<Product>>(userEmail + "Cart") ?? new List<Product>();
+            var product = _context.Product.FirstOrDefault(x => x.GroupId == groupID && x.SizeID == sizeId);
 
             Product existingProduct = cart.FirstOrDefault(p => p.ProductId == productId);
             if (existingProduct != null)
             {
                 existingProduct.Quantity--;
+                product.Quantity++;
+                _context.SaveChanges();
             }
 
             HttpContext.Session.setJson(userEmail + "Cart", cart);
@@ -78,15 +87,19 @@ namespace ASM.Controllers
         }
 
         [HttpPost("/Cart/RemoveFromCart")]
-        public IActionResult RemoveFromCart(int productId)
+        public IActionResult RemoveFromCart(int productId, string groupID, int sizeId)
         {
+            Console.WriteLine(sizeId);
             string userEmail = HttpContext.Session.GetString("UserEmail");
             List<Product> cart = HttpContext.Session.getJson<List<Product>>(userEmail + "Cart") ?? new List<Product>();
+            var product = _context.Product.FirstOrDefault(x => x.GroupId == groupID && x.SizeID == sizeId);
 
             Product productToRemove = cart.FirstOrDefault(p => p.ProductId == productId);
             if (productToRemove != null)
             {
                 cart.Remove(productToRemove);
+                product.Quantity += productToRemove.Quantity;
+                _context.SaveChanges();
             }
 
             HttpContext.Session.setJson(userEmail + "Cart", cart);

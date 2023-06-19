@@ -26,33 +26,53 @@ namespace ASM.Controllers
         }
 
         [HttpPost("/add-to-cart")]
-        public IActionResult AddToCart(int productId, string productName, float productPrice, string Image)
+        public IActionResult AddToCart(int productId, string productName, float productPrice, string Image, [FromForm] int colorID, [FromForm] int sizeID, int quantity, string groupId)
         {
-            Console.WriteLine(Image);
             string userEmail = HttpContext.Session.GetString("UserEmail");
             if (userEmail != null)
             {
+                var productInDb = _context.Product.FirstOrDefault(p => p.GroupId == groupId && p.ColorDetailID == colorID);
                 User userInDb = _context.User.FirstOrDefault(u => u.Email == userEmail);
+
+                if(productInDb == null)
+                {
+                    Console.WriteLine("damn");
+                }
 
                 List<Product> cart = HttpContext.Session.getJson<List<Product>>(userEmail + "Cart") ?? new List<Product>();
 
-                Product product = new Product
+                if (quantity > productInDb.Quantity)
                 {
-                    ProductId = productId,
-                    ProductName = productName,
-                    Price = productPrice,
-                    Image = Image,
-                    Quantity = 1
-                };
-
-                Product existingProduct = cart.FirstOrDefault(p => p.ProductId == productId);
-                if (existingProduct != null)
-                {
-                    existingProduct.Quantity++;
+                    string script = "<script>alert('Product out of stock');window.location='/Products';</script>";
+                    return Content(script, "text/html");
                 }
                 else
                 {
-                    cart.Add(product);
+                    Product existingProduct = cart.FirstOrDefault(p => p.ProductId == productId && p.ColorDetailID == colorID && p.SizeID == sizeID);
+
+                    if (existingProduct != null)
+                    {
+                        existingProduct.Quantity += quantity;
+                    }
+                    else
+                    {
+                        Product product = new Product
+                        {
+                            ProductId = productId,
+                            ProductName = productName,
+                            Price = productPrice,
+                            Image = "/images/ProductImage" + productInDb.Image,
+                            ColorDetailID = colorID,
+                            SizeID = sizeID,
+                            Quantity = quantity,
+                            GroupId = groupId
+                        };
+
+                        cart.Add(product);
+                    }
+
+                    productInDb.Quantity -= quantity;
+                    _context.SaveChanges();
                 }
 
                 HttpContext.Session.setJson(userEmail + "Cart", cart);
@@ -62,9 +82,10 @@ namespace ASM.Controllers
 
                 return Redirect("Cart");
             }
-            return Redirect("/login");
 
+            return Redirect("/login");
         }
+
 
         public IActionResult Privacy()
         {
