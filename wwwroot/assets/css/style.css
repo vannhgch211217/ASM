@@ -15,19 +15,21 @@ html, body {
 
 /* Columns */
 .left-column {
+    margin-top: 80px;
     width: 65%;
     position: relative;
 }
 
 .right-column {
     width: 35%;
-    margin-top: 60px;
+    margin-top: 90px;
 }
 
 
 /* Left Column */
 .left-column img {
-    width: 100%;
+    height:107%;
+    width:54%;
     position: absolute;
     left: 0;
     top: 0;
@@ -119,6 +121,23 @@ html, body {
     .color-choose input[type="radio"]#black + label span {
         background-color: #323232;
     }
+
+    .color-choose input[type="radio"]#yellow + label span {
+        background-color: #ffc107;
+    }
+
+    .color-choose input[type="radio"]#grey + label span {
+        background-color: grey;
+    }
+
+    .color-choose input[type="radio"]#beige + label span {
+        background-color: beige;
+    }
+
+    .color-choose input[type="radio"]#green + label span {
+        background-color: #c4c695;
+    }
+
 
     .color-choose input[type="radio"]:checked + label span {
         background-image: url(/images/check-icn.svg);

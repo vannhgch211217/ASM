@@ -74,10 +74,15 @@
             @Html.DisplayFor(model => model.Image)
         </dd>
     </dl>
-    
-    <form asp-action="Delete">
+
+    <form asp-action="Delete" asp-route-id="@Model.ProductId" >
         <input type="hidden" asp-for="ProductId" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <input type="submit" value="Delete this product" class="btn btn-danger" /> |
+    </form>
+
+    <form asp-action="Delete" asp-route-groupId="@Model.GroupId">
+        <input type="hidden" asp-for="GroupId" />
+        <input type="submit" value="Delete all similar product" class="btn btn-danger" /> |
         <a asp-action="Index">Back to List</a>
     </form>
 </div>

@@ -601,6 +601,7 @@ footer .inner-content {
 
 footer .inner-content p {
 	text-transform: uppercase;
+	text-align: center;
 }
 
 footer .inner-content p a {

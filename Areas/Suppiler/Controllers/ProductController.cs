@@ -100,7 +100,7 @@ namespace ASM.Areas.Suppiler.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost("/Suppiler/Product/Create")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProductId,UserID,CategoryID,SizeID,ColorDetailID,ProductName,Price,Quantity,Description")] Product product, IFormFile imageFile,[FromQuery] int? SimilarTo)
+        public async Task<IActionResult> Create([Bind("ProductId,UserID,CategoryID,SizeID,ColorDetailID,ProductName,Price,Quantity,Description")] Product product, IFormFile imageFile, [FromQuery] int? SimilarTo)
         {
             Debug.WriteLine(imageFile.FileName);
 
@@ -224,9 +224,9 @@ namespace ASM.Areas.Suppiler.Controllers
             {
                 return NotFound();
             }
-            ViewData["CategoryID"] = new SelectList(_context.Category, "CategoryID", "CategoryID", product.CategoryID);
-            ViewData["ColorDetailID"] = new SelectList(_context.ColorDetail, "ColorDetailID", "ColorDetailID", product.ColorDetailID);
-            ViewData["SizeID"] = new SelectList(_context.Size, "SizeID", "SizeID", product.SizeID);
+            ViewData["CategoryID"] = new SelectList(_context.Category, "CategoryID", "Name", product.CategoryID);
+            ViewData["ColorDetailID"] = new SelectList(_context.ColorDetail, "ColorDetailID", "Color", product.ColorDetailID);
+            ViewData["SizeID"] = new SelectList(_context.Size, "SizeID", "SizeNumber", product.SizeID);
             ViewData["UserID"] = new SelectList(_context.User, "UserID", "UserID", product.UserID);
             return View(product);
         }
@@ -237,7 +237,7 @@ namespace ASM.Areas.Suppiler.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost("Suppiler/Product/Edit/{id}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ProductId,UserID,CategoryID,SizeID,ColorDetailID,ProductName,Price,Quantity,Description")] Models.Product product, List<IFormFile> imageFiles)
+        public async Task<IActionResult> Edit(int id, [Bind("ProductId,UserID,CategoryID,SizeID,ColorDetailID,ProductName,Price,Quantity,Description")] Models.Product product, IFormFile imageFile)
         {
             if (id != product.ProductId)
             {
@@ -246,29 +246,29 @@ namespace ASM.Areas.Suppiler.Controllers
 
             try
             {
-                
-                // Handle the uploaded images
-                if (imageFiles != null && imageFiles.Count > 0)
-                {
-                    // Delete the existing images from the server (if necessary)
-
-                    // Save the new images to the server and update the product's Images property
-                    var imageNames = new List<string>();
-                    foreach (var imageFile in imageFiles)
-                    {
-                        var imgPath = Path.Combine("wwwroot/images/ProductImage", imageFile.FileName);
-                        using (var stream = System.IO.File.Create(imgPath))
-                        {
-                            await imageFile.CopyToAsync(stream);
-                            imageNames.Add(imageFile.FileName);
-                        }
-                    }
-                    product.Image = string.Join(",", imageNames);
-                }
-
                 var productndb = await _context.Product.AsNoTracking().FirstOrDefaultAsync(p => p.ProductId == id);
-                product.Image = productndb.Image;
                 product.GroupId = productndb.GroupId;
+                Console.WriteLine(productndb.Image);
+                var existingImagePath = Path.Combine("wwwroot/images/ProductImage/", productndb.Image);
+                Console.WriteLine(existingImagePath);
+                // Handle the uploaded images
+                if (existingImagePath != null )
+                {
+                    System.IO.File.Delete(existingImagePath);
+                    // Save the new images to the server and update the product's Images property
+                    var imgPath = Path.Combine("wwwroot/images/ProductImage/", imageFile.FileName);
+
+                    using (var stream = System.IO.File.Create(imgPath))
+                    {
+                        await imageFile.CopyToAsync(stream);
+                        product.Image = imageFile.FileName;
+                    }
+                }
+                else
+                {
+                    product.Image = productndb.Image;
+                }
+                
 
                 _context.Update(product);
                 await _context.SaveChangesAsync();
@@ -330,6 +330,7 @@ namespace ASM.Areas.Suppiler.Controllers
 
         // GET: Suppiler/Product/Delete/5
         [HttpGet("Suppiler/Product/Delete/{id}")]
+
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Product == null)
@@ -343,6 +344,7 @@ namespace ASM.Areas.Suppiler.Controllers
                 .Include(p => p.Size)
                 .Include(p => p.User)
                 .FirstOrDefaultAsync(m => m.ProductId == id);
+
             if (product == null)
             {
                 return NotFound();
@@ -354,18 +356,24 @@ namespace ASM.Areas.Suppiler.Controllers
         // POST: Suppiler/Product/Delete/5
         [HttpPost("Suppiler/Product/Delete/{id}"), ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int? id, string groupId)
         {
+            List<Product> products;
             if (_context.Product == null)
             {
                 return Problem("Entity set 'ASMContext.Product'  is null.");
             }
             var product = await _context.Product.FindAsync(id);
-            if (product != null)
+            if (groupId != null)
+            {
+                products = await _context.Product.Where(p => p.GroupId == groupId).ToListAsync();
+                _context.Product.RemoveRange(products);
+            }
+            else
             {
                 _context.Product.Remove(product);
             }
-
+            
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
