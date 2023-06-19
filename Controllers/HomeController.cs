@@ -61,7 +61,7 @@ namespace ASM.Controllers
                             ProductId = productId,
                             ProductName = productName,
                             Price = productPrice,
-                            Image = "/images/ProductImage" + productInDb.Image,
+                            Image = "/images/ProductImage/" + productInDb.Image,
                             ColorDetailID = colorID,
                             SizeID = sizeID,
                             Quantity = quantity,
