@@ -19,6 +19,8 @@
 
 <body>
     
+        
+
     <main class="container">
 
         <!-- Left Column / Headphones Image -->
@@ -28,12 +30,14 @@
             {
                 <img data-image="@Model[i].ColorDetail.Color.ToLower()" src="/images/ProductImage/@Model[i].Image" alt="">
             }
+                
         </div>
 
             <input type="hidden" name="productId" value="@Model[0].ProductId" />
             <input type="hidden" name="productName" value="@Model[0].ProductName" />
             <input type="hidden" name="productPrice" value="@Model[0].Price" />
             <input type="hidden" name="Image" value="/images/ProductImage/@Model[0].Image" />
+            <input type="hidden" name="groupId" value="@Model[0].GroupId" />
 
         <!-- Right Column -->
         <div class="right-column">
@@ -45,7 +49,6 @@
                 <p>@Model[0].Description</p>
             </div>
             
-
             <!-- Product Configuration -->
             <div class="product-configuration">
 
@@ -103,10 +106,9 @@
 </body>
 </html>
 
-    @foreach (var item in Model)
-    {
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="margin-top:200px">
         <!-- Modal content -->
+    <form action="/add-to-cart" method="post">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -118,37 +120,37 @@
                 <div class="modal-body">
                     <div class="mb-3">
                         <input type="number" min="1" class="form-control" name="Quantity" required />
-                        <span asp-validation-for="@item.Quantity" class="text-danger"></span>
+
                     </div>
                     <div class="mb-3">
-                        <select asp-for="@item.ColorDetailID" class="form-control" required>
-                            <option value="@item.ColorDetailID">@item.ColorDetail.Color</option>
+                        <select class="form-control form-control" name="colorID">
+                                @foreach (var itemColor in Model)
+                                {
+                                <option value="@itemColor.ColorDetailID">@itemColor.ColorDetail.Color</option>
+                                }
                         </select>
-                        <span asp-validation-for="@item.ColorDetailID" class="text-danger"></span>
                     </div>
                     <div class="mb-3">
-                        <select asp-for="@item.SizeID" class="form-control" required>
-                            <option value="@item.SizeID">@item.Size.SizeNumber</option>
+                        <select class="form-control" name="sizeID" required>
+                                @foreach (var itemSize in Model)
+                                {
+                                <option value="@itemSize.SizeID">@itemSize.Size.SizeNumber</option>
+                                }
                         </select>
-                        <span asp-validation-for="@item.SizeID" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <form action="/add-to-cart" method="post">
-                        <!-- Other form fields -->
-                        <input type="hidden" name="color.ColorDetailID" value="@item.ColorDetailID" />
-                        <input type="hidden" name="size.SizeID" value="@item.SizeID" />
-                        <button type="submit" class="btn btn-danger">Save changes</button>
-                    </form>
+                    <button type="submit" class="btn btn-danger">Save changes</button>
                 </div>
             </div>
         </div>
+    </form>
     </div>
-    }
-
-
 
 </form>
+
+
+
 
 

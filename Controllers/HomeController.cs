@@ -26,13 +26,18 @@ namespace ASM.Controllers
         }
 
         [HttpPost("/add-to-cart")]
-        public IActionResult AddToCart(int productId, string productName, float productPrice, string Image, ColorDetail color, Size size, int quantity)
+        public IActionResult AddToCart(int productId, string productName, float productPrice, string Image, [FromForm] int colorID, [FromForm] int sizeID, int quantity, string groupId)
         {
             string userEmail = HttpContext.Session.GetString("UserEmail");
             if (userEmail != null)
             {
-                var productInDb = _context.Product.FirstOrDefault(p => p.ProductId == productId);
+                var productInDb = _context.Product.FirstOrDefault(p => p.GroupId == groupId && p.ColorDetailID == colorID);
                 User userInDb = _context.User.FirstOrDefault(u => u.Email == userEmail);
+
+                if(productInDb == null)
+                {
+                    Console.WriteLine("damn");
+                }
 
                 List<Product> cart = HttpContext.Session.getJson<List<Product>>(userEmail + "Cart") ?? new List<Product>();
 
@@ -43,8 +48,7 @@ namespace ASM.Controllers
                 }
                 else
                 {
-                    // Check if a product with the same productId, color, and size already exists in the cart
-                    Product existingProduct = cart.FirstOrDefault(p => p.ProductId == productId && p.ColorDetailID == color.ColorDetailID && p.SizeID == size.SizeID);
+                    Product existingProduct = cart.FirstOrDefault(p => p.ProductId == productId && p.ColorDetailID == colorID && p.SizeID == sizeID);
 
                     if (existingProduct != null)
                     {
@@ -57,10 +61,11 @@ namespace ASM.Controllers
                             ProductId = productId,
                             ProductName = productName,
                             Price = productPrice,
-                            Image = Image,
-                            ColorDetailID = color.ColorDetailID,
-                            SizeID = size.SizeID,
-                            Quantity = quantity
+                            Image = "/images/ProductImage" + productInDb.Image,
+                            ColorDetailID = colorID,
+                            SizeID = sizeID,
+                            Quantity = quantity,
+                            GroupId = groupId
                         };
 
                         cart.Add(product);
