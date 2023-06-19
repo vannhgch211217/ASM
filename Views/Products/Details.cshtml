@@ -134,17 +134,23 @@
                     </div>
                     <div class="mb-3">
                         <select class="form-control form-control" name="colorID">
-                                @foreach (var itemColor in Model)
+                                @{
+                                    var uniqueColor = Model.Select(m => new { m.ColorDetail.Color, m.ColorDetail.ColorDetailID }).Distinct();
+                                }
+                                @foreach (var itemColor in uniqueColor)
                                 {
-                                <option value="@itemColor.ColorDetailID">@itemColor.ColorDetail.Color</option>
+                                <option value="@itemColor.ColorDetailID">@itemColor.Color</option>
                                 }
                         </select>
                     </div>
                     <div class="mb-3">
                         <select class="form-control" name="sizeID" required>
-                                @foreach (var itemSize in Model)
+                                @{
+                                    var uniqueSize = Model.Select(m => new { m.Size.SizeNumber, m.Size.SizeID }).Distinct();
+                                }
+                                @foreach (var itemSize in uniqueSize)
                                 {
-                                <option value="@itemSize.SizeID">@itemSize.Size.SizeNumber</option>
+                                <option value="@itemSize.SizeID">@itemSize.SizeNumber</option>
                                 }
                         </select>
                     </div>

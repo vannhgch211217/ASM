@@ -42,7 +42,6 @@ namespace ASM.Controllers
         [HttpGet("Products/Details/{id}")]
         public async Task<IActionResult> Details(int? id, string groupId)
         {
-            Console.WriteLine(groupId);
             if (id == null || _context.Product == null)
             {
                 return NotFound();
