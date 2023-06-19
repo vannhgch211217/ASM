@@ -25,6 +25,18 @@ namespace ASM.Controllers
                           Problem("Entity set 'ASMContext.User'  is null.");
         }
 
+        [HttpGet("/about")]
+        public IActionResult About()
+        {
+            return View();
+        }
+
+        [HttpGet("/contact")]
+        public IActionResult Contact()
+        {
+            return View();
+        }
+
         [HttpPost("/add-to-cart")]
         public IActionResult AddToCart(int productId, string productName, float productPrice, string Image, [FromForm] int colorID, [FromForm] int sizeID, int quantity, string groupId)
         {
