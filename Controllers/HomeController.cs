@@ -19,10 +19,15 @@ namespace ASM.Controllers
         [HttpGet("/")]
         public async Task<IActionResult> Index()
         {
+            IQueryable<Product> products = _context.Product;
             List<Product> cart = HttpContext.Session.getJson<List<Product>>("Cart");
-            return _context.User != null ?
+            var distinctProducts = products.GroupBy(p => p.GroupId)
+                                   .Select(g => g.First());
+
+            /*return _context.User != null ?
                           View(await _context.Product.ToListAsync()) :
-                          Problem("Entity set 'ASMContext.User'  is null.");
+                          Problem("Entity set 'ASMContext.User'  is null.");*/
+            return View(await distinctProducts.ToListAsync());
         }
 
         [HttpGet("/about")]
